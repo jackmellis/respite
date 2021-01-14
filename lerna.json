@@ -8,5 +8,10 @@
   "publish": {
     "conventionalCommits": true,
     "yes": true
+  },
+  "command": {
+    "version": {
+      "allowBranch": "main"
+    }
   }
 }
