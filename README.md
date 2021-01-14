@@ -11,11 +11,11 @@ Essentially there are 2 types of state management:
 
 The repo is made up of the following packages:
 
-## @respite/core
+## [@respite/core](./packages/core/README.md)
 
 This is the internal package that all other respite packages are based off. You shouldn't need to use it directly.
 
-## @respite/query
+## [@respite/query](./packages/query/README.md)
 
 A query-based package in a similar vein to react-query. The main feature of this (and one of the biggest draw to react query) is its ability to automatically refresh your data based on other events.
 
@@ -87,7 +87,7 @@ immediately-stale queries, refetching on window focus, automatic exponential ret
 
 Respite takes a more chilled approach to defaults: active queries _never_ go stale by default, automatically retrying must be opted-in, there is no auto-refetching out of the box
 
-## @respite/atom
+## [@respite/atom](./packages/atom/README.md)
 
 Inspired by recoil. I found the usual patterns for recoil very quickly result in confusing setups. Maybe that's just me. I also felt like `selector` is a very confusing term when you're creating an object that's readable and writable. In reality their `selector` is actually just an atom made up of one or more other atoms... surely that's a molecule?
 
@@ -125,7 +125,7 @@ const myQuery = molecule({
 
 There's also quite a lot going on to ensure that your atoms/molecules are correctly invalidated if/when their dependencies change
 
-## @respite/select
+## [@respite/select](./packages/select/README.md)
 
 I always wished for a way to create a new query from an existing one. Admitedly react-query added something similar to this fairly recently, but it still doesn't quite fit what I had in mind. @respite/select allows something like this:
 
@@ -139,6 +139,6 @@ const { data } = specificThingQuery;
 
 I often have an api that provides me with a whole load of data that I then have to split out. I would much prefer to abstract that knowledge away so that my components just think there is a `thingA` and `thingB` query rather than a single `allTheThings` query.
 
-## @respite/action
+## [@respite/action](./packages/action/README.md)
 
 This is a tiny utility library that does a simlar job to react-query's `useMutation` hook. Essentially it wraps a mutator function and provides some metadata about it such as status, error, data, submitting. It's not directly related to queries or atoms so it can be used entirly on its own.
