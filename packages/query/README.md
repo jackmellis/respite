@@ -44,32 +44,32 @@ function App() {
     eager?: boolean,
     prefetch?: boolean,
     ttl?: number,
-    retry?: (error: any, tries: number) => boolean,
+    retry?: (error: any, tries: number) => boolean | Promise<any>,
   },
 ): Query<T>
 ```
 
 Creates a query. The query is lazily created, meaning it won't call `fetch` until you access `query.data`. Ths means you can pass the entire query around your application without immediately trigerring fetches or suspenses.
 
-- key
+- **key**  
   This should be a unique identifier for the query. Any other calls to `useQuery` with the same key will share the same cache pool. Typically the key will be a string but you could use a Symbol or even an object reference.
 
-- fetch
+- **fetch**  
   A function that returns or resolves some value. If it returns a promise then the query will trigger a react suspense on the component that reads it. If it returns a non-promise then it will just resolve immediately. If you omit the fetch argument entirely, the query will immediately resolve with `undefined`
 
-- deps
+- **deps**  
   Any dependencies that your fetch function relies on. If any of the dependencies change, the query will re-fetch (but won't suspend).
 
-- options
+- **options**  
   Additional configuration options
-  - eager
+  - **_eager_**  
     Forces the query to fetch data immediately and suspend the component
-  - prefetch
+  - **prefetch**  
     Causes the query to fetch data immediately _in the background_
-  - ttl
+  - **_ttl_**  
     This is the **time to live** in ms. If set then the query will be invalidated and re-fetched. The default behaviour is to cache a query forever as long as it's being used.
-  - retry
-    If the query fails to resolve, this function will determine whether to try again. The function takes the error and the number of consecutive times the query has failed to fetch.
+  - **_retry_**  
+    If the query fails to resolve, this function will determine whether to try again. The function takes the error and the number of consecutive times the query has failed to fetch. You can return a promise if you want to add a delay before retrying
 
 Example with all arguments:
 
@@ -80,7 +80,7 @@ const query = useQuery("key", () => fetch(`/api/user/${id}`), [id], {
   // refetch after 60 seconds
   ttl: 60000,
   // retry only if we have a 500 response, and only retry 3 times
-  retry: (e, tries) => e.statusCode === 500 || tries < 3,
+  retry: (e, tries) => e.statusCode === 500 && tries < 3,
 });
 ```
 
@@ -102,7 +102,7 @@ const App = () => (
 );
 ```
 
-- cacheTime
+- cacheTime  
   How often to clean up stale queries from the cache. Defaults to 3 minutes
 
 ## Query

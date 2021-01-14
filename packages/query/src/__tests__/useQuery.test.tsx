@@ -612,7 +612,7 @@ describe('when I access data', () => {
           const Child = ({ query }: { query: Query<string> }) => <div>{query.data}</div>;
           const Parent = () => {
             const query = useQuery('count', fetch, [], {
-              retry: (err, count) => count < 3,
+              retry: (err, count) => count < 3 && new Promise(res => setTimeout(res, 50)),
             });
             return (
               <ErrorBoundary FallbackComponent={({ error }) => <div>{error}</div>}>
