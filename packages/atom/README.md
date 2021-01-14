@@ -54,7 +54,7 @@ function App() {
 
 This is the smallest "unit of state". You define the atom globally and then that state is available in any component by passing it into `useState` or `useValue`.
 
-- default
+- **default**
   The default value of the atom. If not provided it defaults to `undefined`.
 
 ## molecule
@@ -70,7 +70,7 @@ This is the smallest "unit of state". You define the atom globally and then that
 
 Okay this signature looks pretty complex so lets break it down by example.
 
-Firstly a molecule can have a getter and/or a setter, or neither(?).
+A molecule can have a getter and/or a setter.
 
 ### get
 
@@ -148,12 +148,17 @@ const m = molecule({
     const [foo, setFoo] = useState(FOO_ATOM);
     const thing = useThing();
 
-    return memo(() => {
-      return foo + thing;
-    }, [foo, thing]);
+    return memo(
+      (value) => {
+        setFoo(value + thing);
+      },
+      [foo, thing]
+    );
   },
 });
 ```
+
+> it's also worth noting that both the getter and setter functions can return promises
 
 ### args
 
