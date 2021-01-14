@@ -73,7 +73,19 @@ In my experience, however, I found that I used only a fraction of its built-in f
 
 `@respite/core` comes in at 5.5kB and `@respite/query` is 3.3kB. That's 8.8kB for the entire thing. Even if you include the totally optional `@respite/select` and `@respite/action` packages, that's still only 12.5kB!
 
-At the time of writing react-query comes in at 45.8kB minified.
+At the time of writing some other state management libraries:
+
+|                       |         |
+| --------------------- | ------: |
+| @respite/query + core |   8.8kB |
+| react-redux + redux   |  21.8kB |
+| react-query           |  45.8kB |
+| recoil                |    48kB |
+| relay                 | 140.7kB |
+| mobx                  |  53.5kB |
+| @apollo/client        | 126.6kB |
+
+You get the idea
 
 - React-centric
 
@@ -85,7 +97,7 @@ react-query has gone to some lengths to make the core state management framework
 
 immediately-stale queries, refetching on window focus, automatic exponential retries, these are certainly some aggressive defaults!
 
-Respite takes a more chilled approach to defaults: active queries _never_ go stale by default, automatically retrying must be opted-in, there is no auto-refetching out of the box
+Respite takes a more chilled approach to defaults: active queries _never_ go stale by default, automatically retrying must be opted-in, there is no externally-triggered refetching out of the box
 
 ## [@respite/atom](./packages/atom/README.md)
 
@@ -134,7 +146,7 @@ const allTheThingsQuery = useQuery(key, fetch);
 const thingAQuery = useSelector(allTheThingsQuery, (things) => things.thingA);
 const thingBQuery = useSelector(allTheThingsQuery, (things) => things.thingB);
 
-const { data } = specificThingQuery;
+const { data } = thingAQuery;
 ```
 
 I often have an api that provides me with a whole load of data that I then have to split out. I would much prefer to abstract that knowledge away so that my components just think there is a `thingA` and `thingB` query rather than a single `allTheThings` query.
