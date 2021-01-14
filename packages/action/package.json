@@ -1,6 +1,6 @@
 {
   "name": "@respite/action",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Jack Ellis <jack.m.ellis@hotmail.co.uk>",
   "homepage": "https://github.com/jackmellis/respite#readme",
@@ -10,7 +10,7 @@
   "types": "dist/ts/index.d.ts",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.yarnpkg.com"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
@@ -32,8 +32,8 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.12.7",
-    "@respite/query": "^0.0.0",
-    "@respite/core": "^0.0.0",
+    "@respite/core": "^1.0.0",
+    "@respite/query": "^1.0.0",
     "@testing-library/react": "^11.2.2",
     "@testing-library/react-hooks": "^3.7.0",
     "@testing-library/user-event": "^12.6.0",
