@@ -8,6 +8,7 @@ import {
   useSubscribe,
   Query,
   InternalQuery,
+  MaybePromise,
 } from '@respite/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import read from './read';
@@ -23,7 +24,7 @@ interface QueryOptions<T> {
   eager?: boolean,
   prefetch?: boolean,
   ttl?: number,
-  retry?: (err: any, tries: number) => boolean,
+  retry?: (err: any, tries: number) => (boolean | Promise<any>),
 }
 
 export default function useQuery<T>(
