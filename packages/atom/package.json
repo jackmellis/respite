@@ -1,0 +1,40 @@
+{
+  "name": "@respite/atom",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Jack Ellis <jack.m.ellis@hotmail.co.uk>",
+  "homepage": "https://github.com/jackmellis/respite#readme",
+  "license": "MIT",
+  "main": "dist/cjs/atom.js",
+  "module": "dist/es/atom.js",
+  "types": "dist/ts/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/respite.git"
+  },
+  "scripts": {
+    "lint": "eslint --fix -c ../../.eslintrc.js --ext ts,tsx src && tsc --noEmit",
+    "build": "rm -rf dist && rollup -c && tsc -d --outDir dist/ts --emitDeclarationOnly",
+    "test": "jest --config ../../jest.config.js src/",
+    "prepublishOnly": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/jackmellis/respite/issues"
+  },
+  "peerDependencies": {
+    "@respite/core": "^0.0.0",
+    "@respite/query": "^0.0.0",
+    "react": "^17.0.1"
+  },
+  "devDependencies": {
+    "@respite/core": "^0.0.0",
+    "@respite/query": "^0.0.0",
+    "@testing-library/react-hooks": "^3.7.0",
+    "jest": "^26.6.3",
+    "react": "^17.0.1"
+  }
+}
