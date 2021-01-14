@@ -1,0 +1,27 @@
+{
+  "name": "respite",
+  "version": "0.0.0",
+  "description": "All the state management",
+  "main": "index.js",
+  "repository": "git@github.com:jackmellis/respite.git",
+  "author": "Jack Ellis",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "yarn build",
+    "lint": "lerna run lint",
+    "lint:scope": "lerna exec yarn lint --scope $1",
+    "test": "lerna run test",
+    "test:scope": "lerna exec \"yarn test --watch\" --scope $1",
+    "build": "lerna run build",
+    "build:scope": "lerna exec yarn build --scope $1",
+    "ci": "yarn && yarn lint && yarn test",
+    "start": "lerna exec --scope @respite/demos \"yarn storybook\""
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
