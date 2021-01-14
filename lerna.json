@@ -5,13 +5,16 @@
   "version": "0.0.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "publish": {
-    "conventionalCommits": true,
-    "yes": true
-  },
   "command": {
+    "publish": {
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "yes": true
+    },
     "version": {
-      "allowBranch": "main"
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "yes": true
     }
   }
 }
