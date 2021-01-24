@@ -8,7 +8,6 @@ import {
   useSubscribe,
   Query,
   InternalQuery,
-  MaybePromise,
 } from '@respite/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import read from './read';
