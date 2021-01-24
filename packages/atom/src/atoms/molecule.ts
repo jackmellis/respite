@@ -1,5 +1,6 @@
 import { Atom, getInternalAtom, isPromise, MaybePromise, Molecule } from '@respite/core';
 import { useQuery } from '@respite/query';
+import { useCallback } from 'react';
 
 const getGetter = <T>(
   molecule: Molecule<T>,
@@ -40,17 +41,21 @@ const getSetter = <T>(
   args: any[],
 ) => {
   let setter: (value: T) => MaybePromise<any>;
+  let deps = args;
 
-  const callback = (fn: (value: T) => MaybePromise<any>) => {
+  const callback = (fn: (value: T) => MaybePromise<any>, qDeps: any[] = []) => {
     setter = fn;
+    deps = qDeps;
     return () => void 0;
   };
   callback.get = (atom: Atom<any> | Molecule<any>, atomDeps: any[] = []) => {
     const [ value ] = getInternalAtom(atom).getState(atomDeps);
+    deps = deps.concat(value);
     return value;
   };
   callback.set = (atom: Atom<any> | Molecule<any>, atomDeps: any[] = []) => {
     const [ , setValue ] = getInternalAtom(atom).getState(atomDeps);
+    deps = deps.concat(setValue);
     return setValue;
   };
 
@@ -63,7 +68,7 @@ const getSetter = <T>(
     }
   }
 
-  return [ setter ] as [ typeof setter ];
+  return [ useCallback(setter, deps) ] as [ typeof setter ];
 };
 
 function getState<T, D extends any[]>(this: Molecule<T, D>, args: D): [ T, (value: T) => void  ] {

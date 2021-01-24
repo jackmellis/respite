@@ -1,5 +1,6 @@
 import { Atom } from '@respite/core';
 import { useQuery } from '@respite/query';
+import { useCallback } from 'react';
 
 function getState<T>(this: Atom<T>): [ T, (value: T) => void ] {
   // eslint-disable-next-line no-invalid-this
@@ -7,9 +8,10 @@ function getState<T>(this: Atom<T>): [ T, (value: T) => void ] {
   const query = useQuery(atom, () => atom.default);
   const state = query.data;
 
-  const setState = (value: T) => {
+  const setState = useCallback((value: T) => {
     query.data = value;
-  };
+  }, [ query ]);
+
   return [ state, setState ];
 }
 
