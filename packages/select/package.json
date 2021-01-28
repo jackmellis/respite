@@ -59,7 +59,7 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@respite/core": "^0.0.0",
+    "@respite/core": "^2.0.0",
     "react": "^17.0.1"
   }
 }
