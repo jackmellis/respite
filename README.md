@@ -71,19 +71,20 @@ In my experience, however, I found that I used only a fraction of its built-in f
 
 - Size
 
-`@respite/core` comes in at 5.5kB and `@respite/query` is 3.3kB. That's 8.8kB for the entire thing. Even if you include the totally optional `@respite/select` and `@respite/action` packages, that's still only 12.5kB!
+`@respite/core` comes in at 4.1kB and `@respite/query` is 2.6kB. That's 6.7kB for the entire thing. Even if you include the totally optional `@respite/select` and `@respite/action` packages, that's still only 10.7kB!
 
 At the time of writing some other state management libraries:
 
-|                       |         |
-| --------------------- | ------: |
-| @respite/query + core |   8.8kB |
-| react-redux + redux   |  21.8kB |
-| react-query           |  45.8kB |
-| recoil                |    48kB |
-| relay                 | 140.7kB |
-| mobx                  |  53.5kB |
-| @apollo/client        | 126.6kB |
+|                                                                                                                                 |         |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------: |
+| [query](https://bundlephobia.com/result?p=@respite/query@2.0.1) + [core](https://bundlephobia.com/result?p=@respite/core@2.0.0) |   6.7kB |
+| [jotai](https://bundlephobia.com/result?p=jotai@0.12.7)                                                                         |   7.2kB |
+| [react-redux](https://bundlephobia.com/result?p=react-redux@7.2.2) + [redux](https://bundlephobia.com/result?p=redux@4.0.5)     |  21.8kB |
+| [react-query](https://bundlephobia.com/result?p=react-query@3.6.0)                                                              |  46.4kB |
+| [recoil](https://bundlephobia.com/result?p=recoil@0.1.2)                                                                        |    48kB |
+| [mobx](https://bundlephobia.com/result?p=mobx@6.1.0)                                                                            |  56.9kB |
+| [react-relay](https://bundlephobia.com/result?p=react-relay@10.1.3)                                                             |   141kB |
+| [@apollo/client](https://bundlephobia.com/result?p=@apollo/client@3.3.7)                                                        | 126.7kB |
 
 You get the idea
 
