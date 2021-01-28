@@ -207,6 +207,15 @@ const [second] = useState(m, [2]);
 
 Returns a reset function that reverts the atom to its initial state
 
+## useInitialize
+
+```ts
+<T>(atom: Atom<T>, value: T): T
+```
+
+this hook lets you set an initial value for an atom, allowing you override the atom's own default value
+the most obvious use case for this is when testing and you want the atom to be in a specific state
+
 ## Provider
 
 ```ts
