@@ -25,6 +25,7 @@
   "bugs": {
     "url": "https://github.com/jackmellis/respite/issues"
   },
+  "sideEffects": false,
   "peerDependencies": {
     "@respite/core": "^2.0.0",
     "@respite/query": "^2.0.0",
