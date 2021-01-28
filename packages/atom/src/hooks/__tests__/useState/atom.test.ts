@@ -1,4 +1,4 @@
-import { useState as useReactState } from 'react';
+import { useEffect, useState as useReactState } from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { Provider } from '@respite/core';
 import { useQuery } from '@respite/query';
@@ -64,6 +64,24 @@ describe('when I set state', () => {
 
     expect(stateA).toBe('cat');
     expect(stateB).toBe('cat');
+  });
+});
+
+describe('when I immediately update the state', () => {
+  it('doesn\'t crash and burn :D', async() => {
+    const myAtom = atom({
+      default: 'dog',
+    });
+
+    const { waitForNextUpdate } = renderHook(() => {
+      const [ , setState ] = useState(myAtom);
+
+      useEffect(() => {
+        setState('cat');
+      }, [ setState ]);
+    }, { wrapper });
+
+    await waitForNextUpdate();
   });
 });
 
