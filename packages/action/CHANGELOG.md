@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/jackmellis/respite/compare/v2.2.0...v2.4.0) (2021-01-29)
+
+**Note:** Version bump only for package @respite/action
+
+
+
+
+
 # [2.2.0](https://github.com/jackmellis/respite/compare/v2.1.0...v2.2.0) (2021-01-29)
 
 **Note:** Version bump only for package @respite/action
