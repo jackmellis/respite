@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/jackmellis/respite/compare/v2.1.0...v2.2.0) (2021-01-29)
+
+
+### Features
+
+* **@respite/query:** export QueryOptions type ([dd4b59f](https://github.com/jackmellis/respite/commit/dd4b59f51a6b361f6d3048b4c54bef0864dc3803))
+
+
+
+
+
 # [2.1.0](https://github.com/jackmellis/respite/compare/v2.0.2...v2.1.0) (2021-01-28)
 
 
