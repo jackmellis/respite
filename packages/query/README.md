@@ -112,21 +112,24 @@ const App = () => (
   status: Status,
   data: T,
   reset(): void,
-  invalidate(): void
+  invalidate(): void,
+  resolve(): Promise<T>
 }
 ```
 
 The query shape returned by `useQuery`. It contains the following properties:
 
-- status
+- status  
   The current status of the query
-- data
+- data  
   The data returned by the fetch function. This property is incredibly important. As soon as you access data it will begin fetching the query data.  
   Data is also writable. If you set `query.data = someValue` it will immediately set the query to resolved and share the data value with the rest of the app. This means you _could_ use a query to store any global state without a fetch function.
-- reset
+- reset  
   completely resets a query into its initial idle state
-  invalidate
+  invalidate  
   invalidates the current query and re-fetches its data
+- resolve  
+  this gives you a "safe" way to access the data outside of a top-level render function. It returns a promise that will resolve with the value of the query. If the query is already fetched and cached, it will resolve immediately, otherwise it will begin fetching the query and resolve with the value once it is ready.
 
 ## Status
 

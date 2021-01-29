@@ -29,6 +29,7 @@ function singleQueryGetter<T, R>(
       // methods
       invalidate: query.invalidate,
       reset: query.reset,
+      resolve: () => query.resolve().then(selector),
       // internal
       deps: q.deps,
       fetch: q.fetch,

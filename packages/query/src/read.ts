@@ -15,7 +15,7 @@ const getResultFromIdle = <T>(promise: Promise<T> | SyncPromise<T>, fetch: Fetch
   if (isSyncPromise(promise)) {
     return promise.value;
   }
-  const result = fetch();
+  const result = fetch(true);
   // if fetch is asynchronous then we want to throw it and suspend the component
   if (isPromise(result)) {
     throw result;
@@ -36,7 +36,7 @@ export default function makeRead<T>(
     // if the query needs fetching but the local query has data, we just want to silently fetch in the background
     const promise = cache.getPromise<T>(deps);
     if (queryStatus === Status.IDLE && localStatus !== Status.IDLE && promise == null) {
-      fetch();
+      fetch(true);
     }
 
     switch (localStatus) {

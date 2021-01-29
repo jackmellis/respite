@@ -53,6 +53,8 @@ function multiQueryGetter<T, R>(
       // internal
       deps: queries,
       fetch: () => queries.forEach((query: InternalQuery<T>) => query.fetch()),
+      // @ts-ignore
+      resolve: () => Promise.all(queries.map(query => query.resolve())),
     };
     Object.defineProperty(result, '$$isQuery', { value: true });
     Object.defineProperty(result, 'data', {

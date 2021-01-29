@@ -12,7 +12,7 @@ export default function makeFetch<T>(
   callback: CallbackType<T>,
   retry: (error: any, tries: number) => (boolean | Promise<any>),
 ) {
-  const fetch = (tries = 1) => {  
+  const fetch = (silent = false, tries = 1) => {  
     // if there's already a promise then we're in the middle of fetching the data
     // potentially from an identical query from another component
     const existingPromise = cache.getPromise<T>(deps);
@@ -30,14 +30,18 @@ export default function makeFetch<T>(
           try {
             const data = await dataOrPromise;
             cache.success(deps, data);
+            return data;
           } catch (e) {
             const shouldRetry = retry?.(e, tries);
             if (shouldRetry) {
               await shouldRetry;
               cache.setPromise(deps, null);
-              return fetch(tries + 1);
+              return fetch(silent, tries + 1);
             }
             cache.failure(deps, e);
+            if (!silent) {
+              throw e;
+            }
           }
         });
         cache.setPromise(deps, p);
@@ -58,12 +62,14 @@ export default function makeFetch<T>(
     } catch (e) {
       const shouldRetry = retry?.(e, tries);
       if (shouldRetry) {
-        return fetch(tries + 1);
+        return fetch(silent, tries + 1);
       }
       Promise.resolve().then(() => {
         cache.failure(deps, e);
       });
-      throw e;
+      if (!silent) {
+        throw e;
+      }
     }
   };
   return fetch;

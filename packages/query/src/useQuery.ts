@@ -8,6 +8,7 @@ import {
   useSubscribe,
   Query,
   InternalQuery,
+  isSyncPromise,
 } from '@respite/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import read from './read';
@@ -59,6 +60,20 @@ export default function useQuery<T>(
     });
   };
 
+  const resolve = () => {
+    if (query.status === Status.SUCCESS) {
+      return Promise.resolve(query.data);
+    }
+    const promise = cache.getPromise(deps);
+    if (promise == null) {
+      return Promise.resolve(fetch(false));
+    }
+    if (isSyncPromise(promise)) {
+      return Promise.resolve(promise.value);
+    }
+    return promise;
+  };
+
   const firstRenderRef = useRef(true);
   useEffect(() => {
     if (firstRenderRef.current) {
@@ -82,7 +97,7 @@ export default function useQuery<T>(
     useEffect(() => {
       const promise = cache.getPromise(deps);
       if (query.status === Status.IDLE && !promise) {
-        fetch();
+        fetch(true);
       }
     }, [ query.status ]);
   }
@@ -95,6 +110,7 @@ export default function useQuery<T>(
       // methods
       invalidate,
       reset,
+      resolve,
       // internal
       deps,
       fetch,

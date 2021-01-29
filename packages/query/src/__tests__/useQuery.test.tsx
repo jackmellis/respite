@@ -306,7 +306,7 @@ describe('when I access data', () => {
               if (count === 0) {
                 return Promise.resolve(`count: ${count}`);
               }
-              return Promise.reject('error');
+              return Promise.reject(new Error('fetch went wrong'));
             });
             const Fallback = () => (<div>Loading...</div>);
             const Child = ({
@@ -753,6 +753,88 @@ describe('when I access data', () => {
       render(<Parent/>, { wrapper });
 
       await screen.findByText('true');
+    });
+  });
+});
+
+describe('resolve', () => {
+  describe('when I resolve an already-fetched query', () => {
+    it('returns the value', async() => {
+      const fetch = jest.fn().mockResolvedValue('foo');
+      const Component = () => {
+        const query = useQuery('test', fetch, [], { prefetch: true });
+        const [ state, setState ] = useState<string>(null);
+
+        useEffect(() => {
+          if (query.status === Status.SUCCESS) {
+            query.resolve().then(x => {
+              setState(x);
+            });
+          }
+        }, [ query.resolve, query.status ]);
+
+        return <div>{state}</div>;
+      };
+
+      render(<Component/>, { wrapper });
+
+      await screen.findByText('foo');
+
+      expect(fetch).toBeCalledTimes(1);
+    });
+
+  });
+  describe('when I resolve a new query', () => {
+    it('fetches and resolves the value', async() => {
+      const fetch = jest.fn().mockResolvedValue('foo');
+      const Component = () => {
+        const query = useQuery('test', fetch);
+        const [ state, setState ] = useState<string>(null);
+
+        useEffect(() => {
+          query.resolve().then(x => {
+            setState(x);
+          });
+        }, [ query.resolve ]);
+
+        return <div>{state}</div>;
+      };
+
+      render(<Component/>, { wrapper });
+
+      await screen.findByText('foo');
+
+      expect(fetch).toBeCalledTimes(1);
+    });
+    describe('when I access the query', () => {
+      it('returns the cached value', async() => {
+        const fetch = jest.fn().mockResolvedValue('foo');
+        const Component = () => {
+          const query = useQuery('test', fetch);
+          const [ state, setState ] = useState<string>(null);
+          const [ moreState, setMoreState ] = useState<string>(null);
+  
+          useEffect(() => {
+            query.resolve().then(x => {
+              setState(x);
+            });
+          }, [ query.resolve ]);
+
+          useEffect(() => {
+            if (state) {
+              setMoreState(query.data);
+            }
+          }, [ state ]);
+  
+          return <div>{moreState}</div>;
+        };
+  
+        render(<Component/>, { wrapper });
+  
+        await screen.findByText('foo');
+  
+        expect(fetch).toBeCalledTimes(1);
+      });
     });
   });
 });

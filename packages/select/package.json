@@ -1,6 +1,6 @@
 {
   "name": "@respite/select",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "> TODO: description",
   "author": "Jack Ellis <jack.m.ellis@hotmail.co.uk>",
   "homepage": "https://github.com/jackmellis/respite#readme",
@@ -33,9 +33,9 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.12.7",
-    "@respite/atom": "^2.2.0",
-    "@respite/core": "^2.1.0",
-    "@respite/query": "^2.2.0",
+    "@respite/atom": "^2.3.0",
+    "@respite/core": "^2.3.0",
+    "@respite/query": "^2.3.0",
     "@testing-library/react": "^11.2.2",
     "@testing-library/react-hooks": "^3.7.0",
     "@testing-library/user-event": "^12.6.0",
@@ -62,5 +62,6 @@
   "peerDependencies": {
     "@respite/core": "^2.0.0",
     "react": "^17.0.1"
-  }
+  },
+  "gitHead": "643ca98490b8ee706bd687d5809567aac5bad329"
 }
