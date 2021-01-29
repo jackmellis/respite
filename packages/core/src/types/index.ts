@@ -26,6 +26,7 @@ export type MaybePromise<T> = Promise<T> | T;
 export interface Query<T> {
   status: Status,
   data: T,
+  resolve(): Promise<T>,
   reset(): void,
   invalidate(): void,
 }
