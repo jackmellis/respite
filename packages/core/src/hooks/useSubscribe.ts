@@ -1,22 +1,12 @@
 import { useEffect } from 'react';
 import { Deps } from '../types';
-import { useContext } from '../hooks';
-import { getSub } from '../utils';
+import useCache from './useCache';
 
 export default function useSubscribe(deps: Deps, ttl?: number) {
-  const { subscribers } = useContext<any>();
+  const cache = useCache();
 
   useEffect(() => {
-    let sub = getSub(subscribers, deps);
-    if (sub == null) {
-      sub = {
-        deps,
-        promise: null,
-        subscribers: 0,
-        created: new Date(),
-      };
-      subscribers.push(sub);
-    }
+    const sub = cache.getSubscriber(deps);
     sub.subscribers++;
     if (ttl != null) {
       sub.ttl = ttl;
