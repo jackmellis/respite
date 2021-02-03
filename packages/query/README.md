@@ -84,6 +84,34 @@ const query = useQuery("key", () => fetch(`/api/user/${id}`), [id], {
 });
 ```
 
+## useQueryCallback
+
+```ts
+<T>(
+  key: any,
+  fetch: (deps: any[]) => Promise<T> | T,
+  options?: {
+    ttl?: number
+  }
+): (deps: any[]) => Promise<Query<T>>
+```
+
+Sometimes you don't know a query's keys until later on, such as inside a callback function, so you can't use the `useQuery` hook directly.
+
+The `useCallbackQuery` hook lets you create a function that will take the dependencies at a later point and return an asynchronous query.
+
+For example:
+
+```ts
+const fetchQuery = useQueryCallback(key, ([name]) => fetchData(name));
+
+const onSubmit = async (values) => {
+  const { data } = await fetchQuery([values.name]);
+};
+```
+
+useQueryCallback will synchronise with useQuery. So if you've already fetched the data with one method, it will be immediately resolved for the other method.
+
 ## Provider
 
 ```ts
