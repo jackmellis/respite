@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import useContext from './useContext';
 import { getQueryByDeps, getSub } from '../utils';
 import type SyncPromise from '../utils/SyncPromise';
@@ -56,8 +56,8 @@ export default function useCache(): Cache {
   };
   const setPromise = <T>(deps: Deps, promise: Promise<T> | SyncPromise<T>) => {
     const sub = getSubscriber<T>(deps);
-      sub.promise = promise;
-      sub.created = new Date();
+    sub.promise = promise;
+    sub.created = new Date();
   };
   const fetching = onlyWhenMounted((deps: Deps) => {
     dispatch({
@@ -97,7 +97,7 @@ export default function useCache(): Cache {
     mountedRef.current = false;
   }, []);
 
-  return {
+  return useMemo(() => ({
     getQuery,
     getSubscriber,
     getPromise,
@@ -106,5 +106,5 @@ export default function useCache(): Cache {
     success,
     failure,
     invalidate,
-  };
+  }), [ state, dispatch ]);
 }
