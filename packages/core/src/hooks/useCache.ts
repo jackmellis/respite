@@ -32,11 +32,21 @@ export default function useCache(): Cache {
     }
   };
 
-  const getQuery = <T>(deps: Deps) => getQueryByDeps<T>(state, deps)[0] ?? {
-    status: Status.IDLE,
-    deps,
-    data: null,
-    error: null,
+  const getQuery = <T>(deps: Deps) => {
+    let [ query ] = getQueryByDeps<T>(state, deps);
+    if (query != null) {
+      const sub = getSub<T>(subscribers, deps);
+      if (sub != null && sub.ttl != null && !sub.promise && sub.created.getTime() + sub.ttl < new Date().getTime()) {
+        query = null;
+      }
+    }
+    
+    return query ?? {
+      status: Status.IDLE,
+      deps,
+      data: null,
+      error: null,
+    };
   };
   const getSubscriber = <T>(deps: Deps) => {
     let sub = getSub<T>(subscribers, deps);
