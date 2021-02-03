@@ -2,13 +2,14 @@ import { useEffect, useRef } from 'react';
 import useContext from './useContext';
 import { getQueryByDeps, getSub } from '../utils';
 import type SyncPromise from '../utils/SyncPromise';
-import type { AnyFunction, Deps, Key, QueryState } from '../types';
+import type { AnyFunction, Deps, Key, QueryState, Subscriber } from '../types';
 import { ActionType, Status } from '../constants';
 
 export interface Cache {
   getQuery<T>(deps: Deps): QueryState<T>,
   getPromise<T>(deps: Deps): Promise<T> | SyncPromise<T>,
   setPromise<T>(deps: Deps, promise: Promise<T> | SyncPromise<T>): void,
+  getSubscriber<T>(deps: Deps): Subscriber<T>,
   fetching(deps: Deps): void,
   success<T>(deps: Deps, data: T): void,
   failure(deps: Deps, error: any): void,
@@ -37,22 +38,26 @@ export default function useCache(): Cache {
     data: null,
     error: null,
   };
+  const getSubscriber = <T>(deps: Deps) => {
+    let sub = getSub<T>(subscribers, deps);
+    if (sub == null) {
+      sub = {
+        deps,
+        promise: null,
+        subscribers: 0,
+        created: new Date(),
+      };
+      subscribers.push(sub);
+    }
+    return sub;
+  };
   const getPromise = <T>(deps: Deps) => {
     return getSub<T>(subscribers, deps)?.promise;
   };
   const setPromise = <T>(deps: Deps, promise: Promise<T> | SyncPromise<T>) => {
-    const sub = getSub<T>(subscribers, deps);
-    if (sub == null) {
-      subscribers.push({
-        deps,
-        subscribers: 0,
-        promise,
-        created: new Date(),
-      });
-    } else {
+    const sub = getSubscriber<T>(deps);
       sub.promise = promise;
       sub.created = new Date();
-    }
   };
   const fetching = onlyWhenMounted((deps: Deps) => {
     dispatch({
@@ -94,6 +99,7 @@ export default function useCache(): Cache {
 
   return {
     getQuery,
+    getSubscriber,
     getPromise,
     setPromise,
     fetching,
