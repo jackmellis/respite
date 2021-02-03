@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/jackmellis/respite/compare/v2.5.0...v2.5.1) (2021-02-03)
+
+
+### Bug Fixes
+
+* **@respite/core:** ttl should be considered when fetching a query ([a19dea0](https://github.com/jackmellis/respite/commit/a19dea00ef0c216a1918b8c786121d242a95eb2a))
+
+
+
+
+
 # [2.5.0](https://github.com/jackmellis/respite/compare/v2.4.0...v2.5.0) (2021-02-03)
 
 
