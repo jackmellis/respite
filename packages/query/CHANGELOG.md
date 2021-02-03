@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/jackmellis/respite/compare/v2.4.0...v2.5.0) (2021-02-03)
+
+
+### Features
+
+* **@respite/query:** useQueryCallback method ([d3f5367](https://github.com/jackmellis/respite/commit/d3f53677b6eaaa9e415a7001afd0377a5079ad2a)), closes [#30](https://github.com/jackmellis/respite/issues/30)
+
+
+
+
+
 # [2.4.0](https://github.com/jackmellis/respite/compare/v2.2.0...v2.4.0) (2021-01-29)
 
 

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/jackmellis/respite/compare/v2.4.0...v2.5.0) (2021-02-03)
+
+
+### Bug Fixes
+
+* **@respite/core:** memoize the cache object ([3cc20bf](https://github.com/jackmellis/respite/commit/3cc20bf3d7078e2ba09464b0dba64997d389a291))
+
+
+### Features
+
+* **@respite/core:** add getSubscriber method to cache ([8ac79ab](https://github.com/jackmellis/respite/commit/8ac79ab73ece03bc87b3b3fb5ef88e8e993a98f7))
+* **@respite/query:** useQueryCallback method ([d3f5367](https://github.com/jackmellis/respite/commit/d3f53677b6eaaa9e415a7001afd0377a5079ad2a)), closes [#30](https://github.com/jackmellis/respite/issues/30)
+
+
+
+
+
 # [2.4.0](https://github.com/jackmellis/respite/compare/v2.2.0...v2.4.0) (2021-01-29)
 
 
