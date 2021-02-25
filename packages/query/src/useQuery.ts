@@ -9,6 +9,8 @@ import {
   Query,
   InternalQuery,
   isSyncPromise,
+  QueryOptions,
+  useConfig,
 } from '@respite/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import read from './read';
@@ -19,23 +21,20 @@ const write = (cache: Cache, deps: Deps) => <T>(data: T) => {
   cache.success(deps, data);
 };
 
-export interface QueryOptions {
-  eager?: boolean,
-  prefetch?: boolean,
-  ttl?: number,
-  retry?: (err: any, tries: number) => (boolean | Promise<any>),
-}
-
 export default function useQuery<T>(
   key: Key,
   callback?: CallbackType<T>,
   deps: any[] = [],
-  options: QueryOptions = {},
+  options?: QueryOptions,
 ): Query<T> {
   deps = [ key, ...deps ];
   const cache = useCache();
   const query = cache.getQuery<T>(deps);
   const [ state, setState ] = useState(query);
+  options = {
+    ...useConfig().queries,
+    ...options,
+  };
 
   const {
     status,
