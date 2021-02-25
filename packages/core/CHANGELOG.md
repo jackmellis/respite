@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/jackmellis/respite/compare/v2.7.0...v2.7.1) (2021-02-25)
+
+
+### Bug Fixes
+
+* **@respite/core:** useConfig should not return a partial type ([5561971](https://github.com/jackmellis/respite/commit/5561971d2c0288f1ea03daa3a78adafbe259e310))
+
+
+
+
+
 # [2.7.0](https://github.com/jackmellis/respite/compare/v2.6.0...v2.7.0) (2021-02-25)
 
 
