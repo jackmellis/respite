@@ -52,7 +52,7 @@ function singleAtomSelector<T, R>(atom: Atom<T> | Molecule<T>, selector: (t: T) 
 
 type UseSelector = typeof singleQueryGetter & typeof singleAtomSelector;
 const useSelector: UseSelector = (
-  query: Query<any> | Array<Query<any>> | Quark<any> | Array<Quark<any>>,
+  query: Query<any> | Quark<any>,
   selector: any,
   deps: any[] = [],
 ): any => {
