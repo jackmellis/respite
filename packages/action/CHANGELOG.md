@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/jackmellis/respite/compare/v2.5.1...v2.6.0) (2021-02-25)
+
+
+### Features
+
+* **@respite/action:** export ActionQuery type ([fd9657d](https://github.com/jackmellis/respite/commit/fd9657d1a6aea29331eee1050ba12d010d9dfed4))
+
+
+
+
+
 ## [2.5.1](https://github.com/jackmellis/respite/compare/v2.5.0...v2.5.1) (2021-02-03)
 
 **Note:** Version bump only for package @respite/action
