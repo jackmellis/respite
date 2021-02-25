@@ -1,6 +1,5 @@
-import { Key, MaybePromise, Query, Status, SyncPromise, useCache } from '@respite/core';
+import { Key, MaybePromise, Query, Status, SyncPromise, useCache, QueryOptions } from '@respite/core';
 import { useCallback, useRef } from 'react';
-import {QueryOptions} from './useQuery';
 
 export default function useQueryCallback<T, D extends any[]>(
   key: Key,

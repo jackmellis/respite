@@ -117,6 +117,7 @@ useQueryCallback will synchronise with useQuery. So if you've already fetched th
 ```ts
 ComponentType<{
   cacheTime?: number,
+  queries?: QueryOptions
 }>
 ```
 
@@ -132,6 +133,8 @@ const App = () => (
 
 - cacheTime  
   How often to clean up stale queries from the cache. Defaults to 3 minutes
+- queries  
+  Default configuration options for all queries
 
 ## Query
 
