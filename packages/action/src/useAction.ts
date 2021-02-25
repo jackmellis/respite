@@ -10,7 +10,7 @@ import wrapCallback from './wrapCallback';
 type AnyFunction<T> = (...args: any[]) => Promise<T>;
 type PromiseType<T> = T extends Promise<infer U> ? U : T;
 
-interface ActionQuery<F extends AnyFunction<any>> {
+export interface ActionQuery<F extends AnyFunction<any>> {
   action: F,
   status: Status,
   data: PromiseType<ReturnType<F>>,
