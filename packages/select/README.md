@@ -38,3 +38,12 @@ For atoms, the selector just immediately returns the derived value. In theory th
 Similar to `useSelector` but accepts an array of queries/atoms.
 
 > Only an array of atoms or an array of molecules is accounted for. Mixing atoms and molecules is not supported currently
+
+## useSelectValue
+
+```ts
+<T, R>(query: Query<T>, selector(t: T) => R, deps?: any[]): R;
+<T, R>(atom: Atom<T>, selector(t: T) => R,deps?: any[]): R;
+```
+
+Similar to `useSelector` except it immediately returns the transformed value instead of returning a query object
