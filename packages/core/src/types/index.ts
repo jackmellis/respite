@@ -23,6 +23,17 @@ export type Deps = any[];
 
 export type MaybePromise<T> = Promise<T> | T;
 
+export interface RespiteConfig {
+  queries: QueryOptions;
+}
+
+export interface QueryOptions {
+  eager?: boolean,
+  prefetch?: boolean,
+  ttl?: number,
+  retry?: (err: any, tries: number) => (boolean | Promise<any>),
+}
+
 export interface Query<T> {
   status: Status,
   data: T,

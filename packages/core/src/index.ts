@@ -6,6 +6,7 @@ export {
   useCache,
   useSubscribe,
   useContext,
+  useConfig,
 } from './hooks';
 export * from './utils';
 export * from './types';

@@ -26,6 +26,9 @@ it('invalidates all stale queries', async() => {
         ttl: 0,
       },
     ],
+    config: {
+      queries: {},
+    },
   };
 
   renderHook(() => useCleanup(context, 0, 0));
@@ -65,6 +68,7 @@ it('removes stale subscribers from the list', async() => {
         ttl: 0,
       },
     ],
+    config: { queries: {} },
   };
 
   renderHook(() => useCleanup(context, 0, 0));
@@ -99,6 +103,7 @@ it('when cache time is Infinity it does nothing', async() => {
         ttl: 1000,
       },
     ],
+    config: { queries: {} },
   };
 
   renderHook(() => useCleanup(context, Infinity, 0));
