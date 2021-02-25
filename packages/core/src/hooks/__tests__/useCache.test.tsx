@@ -38,6 +38,7 @@ const wrapper = ({
       state,
       subscribers,
       dispatch,
+      config: { queries: {} },
     }}
   >
     {children}
