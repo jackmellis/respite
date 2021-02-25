@@ -27,7 +27,11 @@ it('invalidates all stale queries', async() => {
       },
     ],
     config: {
-      queries: {},
+      queries: {
+        eager: false,
+        prefetch: false,
+        retry: () => false,
+      },
     },
   };
 
@@ -68,7 +72,13 @@ it('removes stale subscribers from the list', async() => {
         ttl: 0,
       },
     ],
-    config: { queries: {} },
+    config: {
+      queries: {
+        eager: false,
+        prefetch: false,
+        retry: () => false,
+      },
+    },
   };
 
   renderHook(() => useCleanup(context, 0, 0));
@@ -103,7 +113,13 @@ it('when cache time is Infinity it does nothing', async() => {
         ttl: 1000,
       },
     ],
-    config: { queries: {} },
+    config: {
+      queries: {
+        eager: false,
+        prefetch: false,
+        retry: () => false,
+      },
+    },
   };
 
   renderHook(() => useCleanup(context, Infinity, 0));

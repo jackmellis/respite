@@ -38,7 +38,13 @@ const wrapper = ({
       state,
       subscribers,
       dispatch,
-      config: { queries: {} },
+      config: {
+        queries: {
+          eager: false,
+          prefetch: false,
+          retry: () => false,
+        },
+      },
     }}
   >
     {children}

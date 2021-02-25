@@ -13,6 +13,8 @@ export type {
   Cache,
 } from '../hooks/useCache';
 
+export type DeepPartial<T> = T extends Function ? T : (T extends object ? { [P in keyof T]?: DeepPartial<T[P]>; } : T);
+
 export type AnyFunction = (...args: any[]) => any;
 
 export type CallbackType<T> = () => MaybePromise<T>;
@@ -28,10 +30,10 @@ export interface RespiteConfig {
 }
 
 export interface QueryOptions {
-  eager?: boolean,
-  prefetch?: boolean,
+  eager: boolean,
+  prefetch: boolean,
   ttl?: number,
-  retry?: (err: any, tries: number) => (boolean | Promise<any>),
+  retry(err: any, tries: number): (boolean | Promise<any>),
 }
 
 export interface Query<T> {

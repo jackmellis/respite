@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import context, { Context } from './context';
 import reducer from './reducer';
 import { useCleanup } from '../hooks';
-import { RespiteConfig } from '../types';
+import { DeepPartial, RespiteConfig } from '../types';
 
-interface Props extends Partial<RespiteConfig> {
+interface Props extends DeepPartial<RespiteConfig> {
   cacheTime?: number,
   children: ReactNode,
 }
