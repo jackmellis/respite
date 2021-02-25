@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/jackmellis/respite/compare/v2.6.0...v2.7.0) (2021-02-25)
+
+
+### Features
+
+* **@respite/core:** configure default query options ([6fb991d](https://github.com/jackmellis/respite/commit/6fb991d6ddd0a050469097d8f045545e7e2eaa10)), closes [#32](https://github.com/jackmellis/respite/issues/32)
+
+
+
+
+
 ## [2.5.1](https://github.com/jackmellis/respite/compare/v2.5.0...v2.5.1) (2021-02-03)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/jackmellis/respite/compare/v2.6.0...v2.7.0) (2021-02-25)
+
+
+### Features
+
+* **@respite/select:** useSelectValue method ([bb5b601](https://github.com/jackmellis/respite/commit/bb5b6017e8bcc9185044c31701973fa2dd6fc2c5)), closes [#18](https://github.com/jackmellis/respite/issues/18)
+
+
+
+
+
 ## [2.5.1](https://github.com/jackmellis/respite/compare/v2.5.0...v2.5.1) (2021-02-03)
 
 **Note:** Version bump only for package @respite/select
