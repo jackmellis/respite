@@ -1,11 +1,24 @@
-import { Key, MaybePromise, Query, Status, SyncPromise, useCache, QueryOptions } from '@respite/core';
+import {
+  Key,
+  MaybePromise,
+  Query,
+  Status,
+  SyncPromise,
+  useCache,
+  QueryOptions,
+  useConfig,
+} from '@respite/core';
 import { useCallback, useRef } from 'react';
 
 export default function useQueryCallback<T, D extends any[]>(
   key: Key,
   callback: (deps: D) => MaybePromise<T>,
-  options: QueryOptions = {},
+  options?: Partial<QueryOptions>,
 ) {
+  options = {
+    ...useConfig().queries,
+    ...options,
+  };
   const cache = useCache();
   // callback will change on every render, but we want to be able to
   // memoize queryCallback for the consumer. This is definitely a bit
