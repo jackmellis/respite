@@ -25,7 +25,7 @@ export default function useQuery<T>(
   key: Key,
   callback?: CallbackType<T>,
   deps: any[] = [],
-  options?: QueryOptions,
+  options?: Partial<QueryOptions>,
 ): Query<T> {
   deps = [ key, ...deps ];
   const cache = useCache();

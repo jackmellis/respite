@@ -32,7 +32,7 @@ export default function makeFetch<T>(
             cache.success(deps, data);
             return data;
           } catch (e) {
-            const shouldRetry = retry?.(e, tries);
+            const shouldRetry = retry(e, tries);
             if (shouldRetry) {
               await shouldRetry;
               cache.setPromise(deps, null);
@@ -60,7 +60,7 @@ export default function makeFetch<T>(
       cache.setPromise(deps, new SyncPromise(dataOrPromise));
       return dataOrPromise;
     } catch (e) {
-      const shouldRetry = retry?.(e, tries);
+      const shouldRetry = retry(e, tries);
       if (shouldRetry) {
         return fetch(silent, tries + 1);
       }
