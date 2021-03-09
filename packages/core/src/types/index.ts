@@ -1,7 +1,7 @@
 import { Status } from '../constants';
 
-export type { Context, Subscriber } from '../context/context';
-export type { Action, QueryState, State } from '../context/reducer';
+export type { Context, Subscriber, QueryState, State } from '../context/context';
+export type { Action } from '../context/reducer';
 export type { Cache } from '../hooks/useCache';
 
 export type DeepPartial<T> = T extends Function

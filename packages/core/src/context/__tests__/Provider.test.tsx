@@ -15,7 +15,7 @@ const wrapper = ({ children, cacheTime }: any) => (
 it('provides the query state', () => {
   const { result } = renderHook(useContext, { wrapper });
 
-  expect(result.current.state).toEqual([]);
+  expect(result.current.queries).toEqual([]);
 });
 
 it('provides a dispatch method', () => {
@@ -35,12 +35,6 @@ it('dispatches events to the state', () => {
     });
   });
 
-  expect(result.current.state).toHaveLength(1);
-  expect(result.current.state[0].status).toBe(Status.SUCCESS);
-});
-
-it('provies subscribers', () => {
-  const { result } = renderHook(useContext, { wrapper });
-
-  expect(result.current.subscribers).toEqual([]);
+  expect(result.current.queries).toHaveLength(1);
+  expect(result.current.queries[0].status).toBe(Status.SUCCESS);
 });

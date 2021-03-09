@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useRef } from 'react';
 import context, { Context } from './context';
 import reducer from './reducer';
 import { useCleanup } from '../hooks';
-import { DeepPartial, RespiteConfig } from '../types';
+import { DeepPartial, RespiteConfig, State } from '../types';
 
 interface Props extends DeepPartial<RespiteConfig> {
   cacheTime?: number,
@@ -14,12 +14,11 @@ export default function Provider ({
   children,
   ...config
 }: Props) {
-  const [ state, dispatch ] = reducer();
-  const subscribers = React.useRef([]).current;
+  const stateRef = useRef<State<any>>([]);
+  const [ queries, dispatch ] = reducer(stateRef.current);
   const value = React.useMemo<Context<any>>(() => ({
-    state,
     dispatch,
-    subscribers,
+    queries,
     config: {
       ...config,
       queries: {
@@ -30,7 +29,7 @@ export default function Provider ({
         ...config?.queries,
       },
     },
-  }), [ state ]);
+  }), [ queries, dispatch ]);
 
   useCleanup(value, cacheTime);
 

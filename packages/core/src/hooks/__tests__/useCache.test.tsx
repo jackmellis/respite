@@ -1,30 +1,23 @@
 import React, { ReactNode } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { Status } from '../../constants';
-import context, { Subscriber } from '../../context/context';
-import { State } from '../../context/reducer';
+import context, { State, Subscriber } from '../../context/context';
 import useCache from '../useCache';
 
-const defaultSubscribers = [
-  {
-    deps: [ 1 ] as [ 1 ],
-    promise: Promise.resolve(),
-    subscribers: 0,
-    created: new Date(),
-  },
-];
-const defaultState = [
+const defaultState: State<any> = [
   {
     status: Status.IDLE,
     deps: [ 1 ] as [ 1 ],
     data: null,
     error: null,
+    created: new Date(),
+    promise: Promise.resolve(),
+    subscribers: [],
   },
 ];
 
 const wrapper = ({
   dispatch = () => {},
-  subscribers = defaultSubscribers,
   state = defaultState,
   children,
 }: {
@@ -35,8 +28,7 @@ const wrapper = ({
 }) => (
   <context.Provider
     value={{
-      state,
-      subscribers,
+      queries: state,
       dispatch,
       config: {
         queries: {
@@ -68,7 +60,7 @@ describe('getPromise', () => {
 
     const promise = result.current.getPromise([ 1 ]);
 
-    expect(promise).toBe(defaultSubscribers[0].promise);
+    expect(promise).toBe(defaultState[0].promise);
   });
   describe('when no subscriber exists', () => {
     it('returns undefined', () => {
@@ -83,34 +75,18 @@ describe('getPromise', () => {
 
 describe('setPromise', () => {
   it('sets a subscriber promise', () => {
-    const subscribers = defaultSubscribers.map(s => ({ ...s }));
+    const state = defaultState.map(s => ({ ...s }));
     const { result } = renderHook(useCache, {
       wrapper,
       initialProps: {
-        subscribers,
+        state,
       },
     });
     const p = Promise.resolve();
 
     result.current.setPromise([ 1 ], p);
 
-    expect(subscribers[0].promise).toBe(p);
-  });
-  describe('when subsriber does not exist', () => {
-    it('creates a new subscription', () => {
-      const subscribers = defaultSubscribers.map(s => ({ ...s }));
-      const { result } = renderHook(useCache, {
-        wrapper,
-        initialProps: {
-          subscribers,
-        },
-      });
-      const p = Promise.resolve();
-
-      result.current.setPromise([ 2 ], p);
-
-      expect(subscribers[1].promise).toBe(p);
-    });
+    expect(state[0].promise).toBe(p);
   });
 });
 

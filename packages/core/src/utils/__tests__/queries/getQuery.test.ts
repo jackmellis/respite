@@ -1,19 +1,25 @@
 import { Status } from '../../../constants';
 import { getQuery } from '../../queries';
-import { Deps } from '../../../types';
+import { Deps, State } from '../../../types';
 
-const state = [
+const state: State<any> = [
   {
     deps: [ 'a' ] as Deps,
     status: Status.ERROR,
     data: null,
     error: null,
+    created: new Date(),
+    promise: null,
+    subscribers: [],
   },
   {
     deps: [ 'b' ] as Deps,
     status: Status.IDLE,
     data: null,
     error: null,
+    created: new Date(),
+    promise: null,
+    subscribers: [],
   },
 ];
 

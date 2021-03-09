@@ -1,19 +1,24 @@
 import { useEffect } from 'react';
-import { Deps } from '../types';
+import { Deps, QueryState } from '../types';
 import useCache from './useCache';
 
-export default function useSubscribe(deps: Deps, ttl?: number) {
+export default function useSubscribe(callback: (query: QueryState<any>) => void, deps: Deps, ttl?: number) {
   const cache = useCache();
 
   useEffect(() => {
-    const sub = cache.getSubscriber(deps);
-    sub.subscribers++;
+    const query = cache.getQuery<any>(deps);
+    const fn = (query: QueryState<any>) => callback(query);
+    
+    query.subscribers.push(fn);
     if (ttl != null) {
-      sub.ttl = ttl;
+      query.ttl = ttl;
     }
 
     return () => {
-      sub.subscribers--;
+      const i = query.subscribers.indexOf(fn);
+      if (i >= 0) {
+        query.subscribers.splice(i, 1);
+      }
     };
   }, deps);
 }

@@ -1,6 +1,6 @@
-import { act, renderHook } from '@testing-library/react-hooks';
 import { ActionType, Status } from '../../constants';
-import useReducer, {
+import { State } from '../context';
+import {
   updateQuery,
   fetching,
   success,
@@ -8,49 +8,58 @@ import useReducer, {
   invalidate,
 } from '../reducer';
 
-const state = [
+const createState = ():State<any> => [
   {
     status: Status.LOADING,
     deps: [ 1, 'foo' ] as [ 1, 'foo' ],
     data: null,
     error: null,
+    created: null,
+    promise: null,
+    subscribers: [],
   },
   {
     status: Status.SUCCESS,
     deps: [ 2, 'bah' ] as [ 2, 'bah' ],
     error: null,
     data: 'baz',
+    created: null,
+    promise: null,
+    subscribers: [],
   },
   {
     status: Status.IDLE,
     deps: [ 2, 'buzz', 1 ] as [ 2, 'buzz', 1 ],
     data: null,
     error: null,
+    created: null,
+    promise: null,
+    subscribers: [],
   },
 ];
 
 describe('updateQuery', () => {
   it('merges props into a given query in the state', () => {
-    const result = updateQuery(state, [ 1, 'foo' ], { data: 'foo' });
-
-    expect(result).toHaveLength(3);
-    expect(result[0].data).toBe('foo');
-  });
-  it('does not mutate the state', () => {
+    const state = createState();
     updateQuery(state, [ 1, 'foo' ], { data: 'foo' });
 
     expect(state).toHaveLength(3);
-    expect(state[0].data).toBe(null);
+    expect(state[0].data).toBe('foo');
   });
   describe('when query does not exist', () => {
     it('creates a new one', () => {
-      const result = updateQuery(state, [ 1, 'z' ], { data: 'foo' });
+      const state = createState();
+      updateQuery(state, [ 1, 'z' ], { data: 'foo' });
 
-      expect(result).toHaveLength(4);
-      expect(result[3]).toEqual({
+      expect(state).toHaveLength(4);
+      expect(state[3]).toEqual({
         deps: [ 1, 'z' ],
         status: Status.IDLE,
         data: 'foo',
+        created: expect.any(Date),
+        error: undefined,
+        promise: null,
+        subscribers: [],
       });
     });
   });
@@ -58,116 +67,84 @@ describe('updateQuery', () => {
 
 describe('fetching', () => {
   it('sets status to loading', () => {
-    const result = fetching(state, {
+    const state = createState();
+    fetching(state, {
       type: ActionType.FETCHING,
       deps: [ 2, 'bah' ],
     });
 
-    expect(result[1].status).toBe(Status.LOADING);
+    expect(state[1].status).toBe(Status.LOADING);
   });
 });
 
 describe('success', () => {
   it('sets the query data', () => {
-    const result = success(state, {
+    const state = createState();
+    success(state, {
       type: ActionType.SUCCESS,
       deps: [ 1, 'foo' ],
       data: 'FOO',
     });
 
-    expect(result[0].status).toBe(Status.SUCCESS);
-    expect(result[0].data).toBe('FOO');
+    expect(state[0].status).toBe(Status.SUCCESS);
+    expect(state[0].data).toBe('FOO');
   });
 });
 
 describe('failure', () => {
   it('sets the query error', () => {
-    const result = failure(state, {
+    const state = createState();
+    failure(state, {
       type: ActionType.FAILURE,
       deps: [ 1, 'foo' ],
       error: 'FOO',
     });
 
-    expect(result[0].status).toBe(Status.ERROR);
-    expect(result[0].error).toBe('FOO');
+    expect(state[0].status).toBe(Status.ERROR);
+    expect(state[0].error).toBe('FOO');
   });
 });
 
 describe('invalidate', () => {
   describe('exact', () => {
     it('removes a query that matches exactly', () => {
-      const result = invalidate(state, {
+      const state = createState();
+      invalidate(state, {
         type: ActionType.INVALIDATE,
         deps: [ 2, 'bah' ],
         exact: true,
       });
 
-      expect(result).toEqual([ state[0], state[2] ]);
+      expect(state[0].status).toBe(Status.LOADING);
+      expect(state[1].status).toBe(Status.IDLE);
+      expect(state[2].status).toBe(Status.IDLE);
     });
   });
   describe('loose', () => {
     it('removes all queries that loosely match', () => {
-      const result = invalidate(state, {
+      const state = createState();
+      invalidate(state, {
         type: ActionType.INVALIDATE,
         deps: [ 2, 'bah' ],
         exact: false,
       });
 
-      expect(result).toEqual([ state[0] ]);
+      expect(state[0].status).toBe(Status.LOADING);
+      expect(state[1].status).toBe(Status.IDLE);
+      expect(state[2].status).toBe(Status.IDLE);
     });
   });
   describe('predicate', () => {
     it('removes all queries that match the predicate', () => {
-      const result = invalidate(state, {
+      const state = createState();
+      invalidate(state, {
         type: ActionType.INVALIDATE,
         predicate: query => query.data != null,
       });
 
-      expect(result).toEqual([ state[0], state[2] ]);
-    });
-  });
-});
-
-describe('useReducer', () => {
-  it('returns a react reducer', () => {
-    const { result } = renderHook(useReducer);
-
-    act(() => {
-      result.current[1]({
-        type: ActionType.FETCHING,
-        deps: [ 'test1' ],
-      });
-    });
-
-    act(() => {
-      result.current[1]({
-        type: ActionType.SUCCESS,
-        deps: [ 'test2' ],
-        data: 'data',
-      });
-    });
-
-    act(() => {
-      result.current[1]({
-        type: ActionType.FAILURE,
-        deps: [ 'test3' ],
-        error: 'error',
-      });
-    });
-
-    act(() => {
-      result.current[1]({
-        type: ActionType.INVALIDATE,
-        deps: [ 'test4' ],
-        exact: false,
-        predicate: null,
-      });
-    });
-
-    act(() => {
-      result.current[1]({
-        type: 'UNKNOWN' as any,
-      });
+      expect(state[0].status).toBe(Status.LOADING);
+      expect(state[1].status).toBe(Status.IDLE);
+      expect(state[2].status).toBe(Status.IDLE);
     });
   });
 });

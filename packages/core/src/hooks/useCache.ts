@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import useContext from './useContext';
-import { getQueryByDeps, getSub } from '../utils';
+import { getQueryByDeps } from '../utils';
 import type SyncPromise from '../utils/SyncPromise';
 import type { AnyFunction, Deps, Key, QueryState, Subscriber } from '../types';
 import { ActionType, Status } from '../constants';
@@ -9,7 +9,7 @@ export interface Cache {
   getQuery<T>(deps: Deps): QueryState<T>,
   getPromise<T>(deps: Deps): Promise<T> | SyncPromise<T>,
   setPromise<T>(deps: Deps, promise: Promise<T> | SyncPromise<T>): void,
-  getSubscriber<T>(deps: Deps): Subscriber<T>,
+  getSubscribers<T>(deps: Deps): Subscriber<T>[],
   fetching(deps: Deps): void,
   success<T>(deps: Deps, data: T): void,
   failure(deps: Deps, error: any): void,
@@ -23,7 +23,7 @@ export interface Cache {
 
 export default function useCache(): Cache {
   const mountedRef = useRef(true);
-  const { state, dispatch, subscribers } = useContext<any>();
+  const { queries, dispatch } = useContext<any>();
 
   // @ts-ignore
   const onlyWhenMounted = <F extends AnyFunction>(fn: F): F => (...args: Parameters<F>): ReturnType<F> => {
@@ -33,41 +33,42 @@ export default function useCache(): Cache {
   };
 
   const getQuery = <T>(deps: Deps) => {
-    let [ query ] = getQueryByDeps<T>(state, deps);
-    if (query != null) {
-      const sub = getSub<T>(subscribers, deps);
-      if (sub != null && sub.ttl != null && !sub.promise && sub.created.getTime() + sub.ttl < new Date().getTime()) {
-        query = null;
-      }
+    let [ query, i ] = getQueryByDeps<T>(queries, deps);
+    if (
+      query != null &&
+      query.ttl != null &&
+      query.promise == null &&
+      query.created.getTime() + query.ttl < new Date().getTime()
+    ) {
+      queries.splice(i, 1);
+      query = null; 
+    }
+
+    if (query == null) {
+      query = {
+        status: Status.IDLE,
+        deps,
+        data: void 0,
+        error: void 0,
+        created: new Date(),
+        promise: undefined,
+        subscribers: [],
+      };
+      queries.push(query);
     }
     
-    return query ?? {
-      status: Status.IDLE,
-      deps,
-      data: null,
-      error: null,
-    };
+    return query;
   };
-  const getSubscriber = <T>(deps: Deps) => {
-    let sub = getSub<T>(subscribers, deps);
-    if (sub == null) {
-      sub = {
-        deps,
-        promise: null,
-        subscribers: 0,
-        created: new Date(),
-      };
-      subscribers.push(sub);
-    }
-    return sub;
+  const getSubscribers = <T>(deps: Deps) => {
+    return getQuery<T>(deps).subscribers;
   };
   const getPromise = <T>(deps: Deps) => {
-    return getSub<T>(subscribers, deps)?.promise;
+    return getQuery<T>(deps).promise;
   };
   const setPromise = <T>(deps: Deps, promise: Promise<T> | SyncPromise<T>) => {
-    const sub = getSubscriber<T>(deps);
-    sub.promise = promise;
-    sub.created = new Date();
+    const query = getQuery<T>(deps);
+    query.promise = promise;
+    query.created = new Date();
   };
   const fetching = onlyWhenMounted((deps: Deps) => {
     dispatch({
@@ -81,7 +82,6 @@ export default function useCache(): Cache {
       deps,
       data,
     });
-    setPromise(deps, null);
   });
   const failure = onlyWhenMounted((deps: Deps, error: any) => {
     dispatch({
@@ -89,7 +89,6 @@ export default function useCache(): Cache {
       deps,
       error,
     });
-    setPromise(deps, null);
   });
   const invalidate = onlyWhenMounted((props: {
     key?: Key,
@@ -109,12 +108,12 @@ export default function useCache(): Cache {
 
   return useMemo(() => ({
     getQuery,
-    getSubscriber,
+    getSubscribers,
     getPromise,
     setPromise,
     fetching,
     success,
     failure,
     invalidate,
-  }), [ state, dispatch ]);
+  }), [ queries, dispatch ]);
 }

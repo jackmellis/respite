@@ -2,7 +2,6 @@ import SyncPromise from './SyncPromise';
 import { Atom, InternalAtom, InternalMolecule, Molecule, Query } from '../types';
 
 export * from'./queries';
-export { default as getSub } from './getSub';
 
 export const isPromise = <T>(x: any): x is Promise<T> => {
   return Object.prototype.toString.call(x) === '[object Promise]';
