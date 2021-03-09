@@ -43,6 +43,7 @@ const wrapper = ({
           eager: false,
           prefetch: false,
           retry: () => false,
+          suspendOnRefetch: false,
         },
       },
     }}

@@ -26,6 +26,7 @@ export default function Provider ({
         eager: false,
         prefetch: false,
         retry: () => false,
+        suspendOnRefetch: false,
         ...config?.queries,
       },
     },

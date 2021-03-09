@@ -31,6 +31,7 @@ it('invalidates all stale queries', async() => {
         eager: false,
         prefetch: false,
         retry: () => false,
+        suspendOnRefetch: false,
       },
     },
   };
@@ -77,6 +78,7 @@ it('removes stale subscribers from the list', async() => {
         eager: false,
         prefetch: false,
         retry: () => false,
+        suspendOnRefetch: false,
       },
     },
   };
@@ -118,6 +120,7 @@ it('when cache time is Infinity it does nothing', async() => {
         eager: false,
         prefetch: false,
         retry: () => false,
+        suspendOnRefetch: false,
       },
     },
   };
