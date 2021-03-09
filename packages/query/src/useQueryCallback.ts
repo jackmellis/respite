@@ -35,7 +35,7 @@ export default function useQueryCallback<T, D extends any[]>(
     } else if (q.status === Status.LOADING) {
       // we're already fetching the data from somewhere else
       // so let's just wait on that promise to resove
-      const promise = cache.getPromise<T>(depsWithKey);
+      const promise = q.promise;
       // it's highly unlikely that promise will be a SyncPromise but there could
       // be some freak race condition where this would be the case
       const data = promise instanceof SyncPromise ? promise.value : await promise;
@@ -54,8 +54,7 @@ export default function useQueryCallback<T, D extends any[]>(
       cache.setPromise<T>(depsWithKey, null);
 
       if (options.ttl != null) {
-        const sub = cache.getSubscriber(depsWithKey);
-        sub.ttl = options.ttl;
+        q.ttl = options.ttl;
       }
 
       q = {
