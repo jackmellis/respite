@@ -8,12 +8,18 @@ const state = [
     status: Status.ERROR,
     data: null,
     error: null,
+    created: new Date(),
+    promise: null,
+    subscribers: [],
   },
   {
     deps: [ 'b', 34 ] as Deps,
     status: Status.IDLE,
     data: null,
     error: null,
+    created: new Date(),
+    promise: null,
+    subscribers: [],
   },
 ];
 

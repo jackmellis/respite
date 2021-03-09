@@ -1,28 +1,37 @@
 import { renderHook } from '@testing-library/react-hooks';
+import { Status } from '../../constants';
 import useCleanup from '../useCleanup';
 
 it('invalidates all stale queries', async() => {
   const context = {
-    state: [],
     dispatch: jest.fn(),
-    subscribers: [
+    queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: 0,
-        created: new Date(),
+        subscribers: [],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: 1,
-        created: new Date(),
+        subscribers: [ jest.fn() ],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: 1,
-        created: new Date(),
+        subscribers: [],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
         ttl: 0,
       },
     ],
@@ -40,36 +49,39 @@ it('invalidates all stale queries', async() => {
 
   await new Promise(res => setTimeout(res, 5));
 
-  expect(context.dispatch).toHaveBeenCalled();
-  const predicate = context.dispatch.mock.calls[0][0].predicate;
-
-  expect(predicate({ deps: [ 1 ] })).toBe(true);
-  expect(predicate({ deps: [ 2 ] })).toBe(false);
-  expect(predicate({ deps: [ 3 ] })).toBe(true);
+  expect(context.queries).toHaveLength(1);
 });
 
 it('removes stale subscribers from the list', async() => {
   const context = {
-    state: [],
     dispatch: jest.fn(),
-    subscribers: [
+    queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: 0,
-        created: new Date(),
+        subscribers: [],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: 1,
-        created: new Date(),
+        subscribers: [ jest.fn() ],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: 1,
-        created: new Date(),
+        subscribers: [ jest.fn() ],
+        created: new Date('2021-01-01'),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
         ttl: 0,
       },
     ],
@@ -83,35 +95,44 @@ it('removes stale subscribers from the list', async() => {
     },
   };
 
-  renderHook(() => useCleanup(context, 0, 0));
+  renderHook(() => useCleanup(context, 0, 50));
 
-  await new Promise(res => setTimeout(res, 5));
+  await new Promise(res => setTimeout(res, 75));
 
-  expect(context.subscribers).toHaveLength(1);
+  expect(context.queries).toHaveLength(2);
+  expect(context.dispatch).toHaveBeenCalledTimes(1);
 });
 
 it('when cache time is Infinity it does nothing', async() => {
   const context = {
-    state: [],
     dispatch: jest.fn(),
-    subscribers: [
+    queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: 0,
+        subscribers: [],
         created: new Date(),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: 1,
+        subscribers: [ jest.fn() ],
         created: new Date(),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
       },
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: 1,
+        subscribers: [ jest.fn() ],
         created: new Date(),
+        data: null,
+        error: null,
+        status: Status.SUCCESS,
         ttl: 1000,
       },
     ],

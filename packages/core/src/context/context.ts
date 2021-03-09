@@ -1,21 +1,28 @@
-import { createContext, Dispatch } from 'react';
+import { createContext } from 'react';
 import type { Deps, RespiteConfig } from '../types';
-import type { Action, State } from './reducer';
+import type { Action } from './reducer';
 import type { SyncPromise } from '..';
+import { Status } from '../constants';
 
-export interface Subscriber<T> {
+export interface QueryState<T> {
   deps: Deps,
-  subscribers: number,
+  status: Status,
+  data: T,
+  error: any,
   promise: Promise<T> | SyncPromise<T>,
   created: Date,
+  subscribers: Subscriber<T>[],
   ttl?: number,
 }
 
+export type Subscriber<T> = (query: QueryState<T>) => void;
+
+export type State<T> = QueryState<T>[];
+
 export interface Context<T> {
-  subscribers: Subscriber<T>[],
-  dispatch: Dispatch<Action<T>>,
-  state: State<T>,
-  config: RespiteConfig;
+  config: RespiteConfig,
+  queries: QueryState<T>[],
+  dispatch(action: Action<T>): void,
 }
 
 export default createContext<Context<any>>(void 0);
