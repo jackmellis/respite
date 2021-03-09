@@ -1,11 +1,11 @@
 import {
-  Cache,
-  Deps,
   Status,
   isPromise,
   isSyncPromise,
   SyncPromise,
+  QueryState,
 } from '@respite/core';
+import { MutableRefObject } from 'react';
 import makeFetch from './fetch';
 
 type Fetch = ReturnType<typeof makeFetch>;
@@ -24,39 +24,34 @@ const getResultFromIdle = <T>(promise: Promise<T> | SyncPromise<T>, fetch: Fetch
 };
 
 export default function makeRead<T>(
-  queryStatus: Status,
-  localStatus: Status,
+  query: QueryState<T>,
+  ref: MutableRefObject<QueryState<T>>,
   fetch: Fetch,
-  cache: Cache,
-  deps: Deps,
-  data: T,
-  error: any,
   suspendOnRefetch: boolean,
 ) {
   return () => {
     // if the query needs fetching but the local query has data, we just want to silently fetch in the background
-    const promise = cache.getPromise<T>(deps);
-    if (queryStatus === Status.IDLE && localStatus !== Status.IDLE && promise == null) {
+    if (query.status === Status.IDLE && ref.current.status !== Status.IDLE && query.promise == null) {
       fetch(true);
     }
 
-    switch (localStatus) {
+    switch (ref.current.status) {
     case Status.IDLE:
-      return getResultFromIdle(promise, fetch);
+      return getResultFromIdle(query.promise, fetch);
     case Status.LOADING:
-      throw cache.getPromise(deps);
+      throw ref.current.promise;
     case Status.FETCHING:
       if (suspendOnRefetch) {
-        throw cache.getPromise(deps);
+        throw ref.current.promise;
       }
-      return data;
+      return ref.current.data;
     case Status.SUCCESS:
-      return data;
+      return ref.current.data;
     case Status.ERROR:
-      if (cache.getPromise(deps)) {
-        throw cache.getPromise(deps);
+      if (query.promise != null) {
+        throw query.promise;
       }
-      throw error;
+      throw ref.current.error;
     }
   };
 }
