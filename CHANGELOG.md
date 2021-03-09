@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/jackmellis/respite/compare/v2.8.0...v3.0.0) (2021-03-09)
+
+
+### Bug Fixes
+
+* **@respite/core:** refactor to avoid race condition errors ([bdf3109](https://github.com/jackmellis/respite/commit/bdf3109c3f9d59ab7275353c05b2c540508f3ea0))
+* **@respite/query:** refactor to avoid race condition errors ([1d26047](https://github.com/jackmellis/respite/commit/1d26047e05e8b34a38b5d253dbc0489142190830))
+* **@respite/select:** refactor to avoid race condition errors ([9b96d17](https://github.com/jackmellis/respite/commit/9b96d174d00568696ceb9eb6b8fcc9bedc088928))
+
+
+### BREAKING CHANGES
+
+* **@respite/select:** the core api has changed significantly
+* **@respite/query:** the core api has changed significantly
+* **@respite/core:** the core api has changed significantly
+
+
+
+
+
 # [2.8.0](https://github.com/jackmellis/respite/compare/v2.7.1...v2.8.0) (2021-03-09)
 
 

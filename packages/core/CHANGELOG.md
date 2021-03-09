@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/jackmellis/respite/compare/v2.8.0...v3.0.0) (2021-03-09)
+
+
+### Bug Fixes
+
+* **@respite/core:** refactor to avoid race condition errors ([bdf3109](https://github.com/jackmellis/respite/commit/bdf3109c3f9d59ab7275353c05b2c540508f3ea0))
+
+
+### BREAKING CHANGES
+
+* **@respite/core:** the core api has changed significantly
+
+
+
+
+
 # [2.8.0](https://github.com/jackmellis/respite/compare/v2.7.1...v2.8.0) (2021-03-09)
 
 
