@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/jackmellis/respite/compare/v2.7.1...v2.8.0) (2021-03-09)
+
+
+### Features
+
+* **@respite/query:** add suspendOnRefetch option ([75905cf](https://github.com/jackmellis/respite/commit/75905cf69017ff57a179a3f3d8fbcf4116ce4ede))
+
+
+
+
+
 ## [2.7.1](https://github.com/jackmellis/respite/compare/v2.7.0...v2.7.1) (2021-02-25)
 
 
