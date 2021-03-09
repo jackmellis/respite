@@ -101,7 +101,6 @@ export default function useQuery<T>(
         query.status = Status.SUCCESS;
         query.data = data;
         ref.current = { ...query };
-        console.log(query);
       }
     }
   }
