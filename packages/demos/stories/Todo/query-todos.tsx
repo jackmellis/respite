@@ -106,6 +106,7 @@ const CreateTodo = ({ query }: { query: Query<Todo[]> }) => {
       // invaliding todos will cause the todo list to refresh
       invalidate({ key: 'todos' });
     } catch (e) {
+      debugger;
       revert();
       // we don't actually need to do anything here unless we need to
       // the error state is automatically captured by useAction
