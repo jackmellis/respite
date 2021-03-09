@@ -110,7 +110,7 @@ describe('when I access data', () => {
       </Suspense>, { wrapper });
   
     
-    await act(async() => {});
+    await act(async() => new Promise(res => setTimeout(res, 50)));
 
     expect(fn).toBeCalledWith('foo');
   });
