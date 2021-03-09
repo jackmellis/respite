@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/jackmellis/respite/compare/v3.0.0...v3.0.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* **@respite/query:** remove console log ([2af3c8e](https://github.com/jackmellis/respite/commit/2af3c8e023ee116b80570f914d0174b7af03eb6b))
+
+
+
+
+
 # [3.0.0](https://github.com/jackmellis/respite/compare/v2.8.0...v3.0.0) (2021-03-09)
 
 

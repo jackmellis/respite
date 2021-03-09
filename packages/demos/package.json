@@ -1,6 +1,6 @@
 {
   "name": "@respite/demos",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "> TODO: description",
   "author": "Jack Ellis <jack.m.ellis@hotmail.co.uk>",
   "homepage": "https://github.com/jackmellis/respite#readme",
@@ -11,11 +11,11 @@
     "url": "git+https://github.com/jackmellis/respite.git"
   },
   "dependencies": {
-    "@respite/action": "^3.0.0",
-    "@respite/atom": "^3.0.0",
+    "@respite/action": "^3.0.1",
+    "@respite/atom": "^3.0.1",
     "@respite/core": "^3.0.0",
-    "@respite/query": "^3.0.0",
-    "@respite/select": "^3.0.0",
+    "@respite/query": "^3.0.1",
+    "@respite/select": "^3.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
