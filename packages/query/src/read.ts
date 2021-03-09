@@ -31,6 +31,7 @@ export default function makeRead<T>(
   deps: Deps,
   data: T,
   error: any,
+  suspendOnRefetch: boolean,
 ) {
   return () => {
     // if the query needs fetching but the local query has data, we just want to silently fetch in the background
@@ -45,6 +46,10 @@ export default function makeRead<T>(
     case Status.LOADING:
       throw cache.getPromise(deps);
     case Status.FETCHING:
+      if (suspendOnRefetch) {
+        throw cache.getPromise(deps);
+      }
+      return data;
     case Status.SUCCESS:
       return data;
     case Status.ERROR:

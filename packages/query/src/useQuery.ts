@@ -9,13 +9,13 @@ import {
   Query,
   InternalQuery,
   isSyncPromise,
-  QueryOptions,
   useConfig,
 } from '@respite/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import read from './read';
 import makeFetch from './fetch';
 import useSyncQueryState from './useSyncQueryState';
+import { QueryOptions } from './types';
 
 const write = (cache: Cache, deps: Deps) => <T>(data: T) => {
   cache.success(deps, data);
@@ -25,7 +25,7 @@ export default function useQuery<T>(
   key: Key,
   callback?: CallbackType<T>,
   deps: any[] = [],
-  options?: Partial<QueryOptions>,
+  options?: QueryOptions,
 ): Query<T> {
   deps = [ key, ...deps ];
   const cache = useCache();
@@ -89,7 +89,7 @@ export default function useQuery<T>(
   if (options.eager) {
     const promise = cache.getPromise(deps);
     if (query.status === Status.IDLE && !promise) {
-      read<T>(query.status, status, fetch, cache, deps, data, error)();
+      read<T>(query.status, status, fetch, cache, deps, data, error, options.suspendOnRefetch)();
     }
   }
   if (options.prefetch) {
@@ -115,7 +115,7 @@ export default function useQuery<T>(
       fetch,
     };
     Object.defineProperty(r, 'data', {
-      get: read<T>(query.status, status, fetch, cache, deps, data, error),
+      get: read<T>(query.status, status, fetch, cache, deps, data, error, options.suspendOnRefetch),
       set: write(cache, deps),
       enumerable: true,
       configurable: true,

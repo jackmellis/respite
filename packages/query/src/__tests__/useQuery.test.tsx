@@ -354,6 +354,112 @@ describe('when I access data', () => {
             await screen.findByText(Status.ERROR);
           });
         });
+
+        describe('when suspendOnRefetch is set', () => {
+          it('sets the status to loading', async () => {
+            const fetch = jest.fn(count => {
+              if (count === 0) {
+                return Promise.resolve(`count: ${count}`);
+              }
+              return new Promise(() => {});
+            });
+            const Fallback = () => (<div>Loading...</div>);
+            const Child = ({
+              query: {
+                data,
+                status,
+              },
+              onClick,
+            }: {
+              query: Query<any>,
+              onClick: () => void,
+            }) => (
+              <div>
+                <div>
+                  {status}
+                </div>
+                <div>
+                  <button onClick={onClick}>increment</button>
+                </div>
+              </div>
+            );
+            const Parent = () => {
+              const [ count, setCount ] = useState(0);
+              const query = useQuery('count', () => fetch(count), [ count ], { suspendOnRefetch: true });
+              const increment = () => setCount(count + 1);
+              return (
+                <Suspense fallback={<Fallback/>}>
+                  <Child
+                    query={query}
+                    onClick={increment}
+                  />
+                </Suspense>
+              );
+            };
+    
+            render(<Parent/>, { wrapper });
+    
+            await act(async() => {});
+    
+            await screen.findByText(Status.SUCCESS);
+    
+            const button = screen.getByRole('button');
+    
+            userEvent.click(button);
+    
+            await act(async() => {});
+    
+            await screen.findByText('Loading...');
+          });
+
+          describe('when the re-fetch succeeds', () => {
+            it('returns the new data', async() => {
+              const fetch = jest.fn(async count => `count: ${count}`);
+              const Fallback = () => (<div>Loading...</div>);
+              const Child = ({
+                query: {
+                  data,
+                },
+                onClick,
+              }: {
+                query: Query<any>,
+                onClick: () => void,
+              }) => (
+                <div>
+                  <div>
+                    {data}
+                  </div>
+                  <div>
+                    <button onClick={onClick}>increment</button>
+                  </div>
+                </div>
+              );
+              const Parent = () => {
+                const [ count, setCount ] = useState(0);
+                const query = useQuery('count', () => fetch(count), [ count ], { suspendOnRefetch: true });
+                const increment = () => setCount(count + 1);
+                return (
+                  <Suspense fallback={<Fallback/>}>
+                    <Child
+                      query={query}
+                      onClick={increment}
+                    />
+                  </Suspense>
+                );
+              };
+      
+              render(<Parent/>, { wrapper });
+    
+              await screen.findByText('count: 0');
+      
+              const button = screen.getByRole('button');
+      
+              userEvent.click(button);
+      
+              await screen.findByText('count: 1');
+            });
+          });
+        });
       });
   
       describe('when the key changes', () => {

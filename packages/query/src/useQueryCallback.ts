@@ -5,15 +5,15 @@ import {
   Status,
   SyncPromise,
   useCache,
-  QueryOptions,
   useConfig,
 } from '@respite/core';
 import { useCallback, useRef } from 'react';
+import { QueryOptions } from './types';
 
 export default function useQueryCallback<T, D extends any[]>(
   key: Key,
   callback: (deps: D) => MaybePromise<T>,
-  options?: Partial<QueryOptions>,
+  options?: QueryOptions,
 ) {
   options = {
     ...useConfig().queries,

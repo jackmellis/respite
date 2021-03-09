@@ -44,6 +44,7 @@ function App() {
     eager?: boolean,
     prefetch?: boolean,
     ttl?: number,
+    suspendOnRefetch?: boolean,
     retry?: (error: any, tries: number) => boolean | Promise<any>,
   },
 ): Query<T>
@@ -68,6 +69,8 @@ Creates a query. The query is lazily created, meaning it won't call `fetch` unti
     Causes the query to fetch data immediately _in the background_
   - **_ttl_**  
     This is the **time to live** in ms. If set then the query will be invalidated and re-fetched. The default behaviour is to cache a query forever as long as it's being used.
+  - **_suspendOnRefetch_**  
+    When a query re-fetches, the default behaviour is to continue to show the previous data until the new data is available. If you set `suspendOnRefetch` to `true`, the query will suspend whenever it refetches.
   - **_retry_**  
     If the query fails to resolve, this function will determine whether to try again. The function takes the error and the number of consecutive times the query has failed to fetch. You can return a promise if you want to add a delay before retrying
 
