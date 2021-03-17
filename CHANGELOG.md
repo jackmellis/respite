@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/jackmellis/respite/compare/v3.0.1...v3.0.2) (2021-03-17)
+
+
+### Bug Fixes
+
+* **@respite/action:** remove onlyWhenMounted guards ([270c6fa](https://github.com/jackmellis/respite/commit/270c6fa3bc8ddb3c3867fd102ea3a1d9a2bf8de6))
+* **@respite/core:** remove onlyWhenMounted guards ([dab9374](https://github.com/jackmellis/respite/commit/dab93743d5cb7ccf46a546a00f3835a54eac3c26))
+
+
+
+
+
 ## [3.0.1](https://github.com/jackmellis/respite/compare/v3.0.0...v3.0.1) (2021-03-09)
 
 
