@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import useContext from './useContext';
 import { getQueryByDeps } from '../utils';
 import type SyncPromise from '../utils/SyncPromise';
-import type { AnyFunction, Deps, Key, QueryState, Subscriber } from '../types';
+import type { Deps, Key, QueryState, Subscriber } from '../types';
 import { ActionType, Status } from '../constants';
 
 export interface Cache {
@@ -22,15 +22,7 @@ export interface Cache {
 }
 
 export default function useCache(): Cache {
-  const mountedRef = useRef(true);
   const { queries, dispatch } = useContext<any>();
-
-  // @ts-ignore
-  const onlyWhenMounted = <F extends AnyFunction>(fn: F): F => (...args: Parameters<F>): ReturnType<F> => {
-    if (mountedRef.current) {
-      return fn(...args);
-    }
-  };
 
   const getQuery = <T>(deps: Deps) => {
     let [ query, i ] = getQueryByDeps<T>(queries, deps);
@@ -70,27 +62,27 @@ export default function useCache(): Cache {
     query.promise = promise;
     query.created = new Date();
   };
-  const fetching = onlyWhenMounted((deps: Deps) => {
+  const fetching = (deps: Deps) => {
     dispatch({
       type: ActionType.FETCHING,
       deps,
     });
-  });
-  const success = onlyWhenMounted(<T>(deps: Deps, data: T) => {
+  };
+  const success = <T>(deps: Deps, data: T) => {
     dispatch({
       type: ActionType.SUCCESS,
       deps,
       data,
     });
-  });
-  const failure = onlyWhenMounted((deps: Deps, error: any) => {
+  };
+  const failure = (deps: Deps, error: any) => {
     dispatch({
       type: ActionType.FAILURE,
       deps,
       error,
     });
-  });
-  const invalidate = onlyWhenMounted((props: {
+  };
+  const invalidate = (props: {
     key?: Key,
     deps?: Deps,
     exact?: boolean,
@@ -100,11 +92,7 @@ export default function useCache(): Cache {
       type: ActionType.INVALIDATE,
       ...props,
     });
-  });
-
-  useEffect(() => () => {
-    mountedRef.current = false;
-  }, []);
+  };
 
   return useMemo(() => ({
     getQuery,
