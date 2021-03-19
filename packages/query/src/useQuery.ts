@@ -12,11 +12,12 @@ import {
   useConfig,
   QueryState,
 } from '@respite/core';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import read from './read';
 import makeFetch from './fetch';
 import syncQueryState from './syncQueryState';
 import { QueryOptions } from './types';
+import { eagerlyFetchQuery, usePrefetch, useReset, useSyncQueryState, useTtl } from './utils';
 
 const write = (cache: Cache, deps: Deps) => <T>(data: T) => {
   cache.success(deps, data);
@@ -72,44 +73,18 @@ export default function useQuery<T>(
     return promise;
   };
 
-  const firstRenderRef = useRef(true);
-  const firstRenderRef2 = useRef(true);
-  useEffect(() => {
-    if (firstRenderRef.current) {
-      firstRenderRef.current = false;
-    } else {
-      reset();
-    }
-  }, [ key ]);
-  useEffect(() => {
-    if (firstRenderRef2.current) {
-      firstRenderRef2.current = false;
-    } else {
-      syncQueryState(query, ref, rerender);
-    }
-  }, deps);
-
+  useReset(key, reset);
+  useSyncQueryState(query, ref, rerender, deps);
+  useTtl(query, invalidate, options.ttl);
   useSubscribe(newQuery => {
     syncQueryState(newQuery, ref, rerender);
-  }, deps, options.ttl);
+  }, deps);
 
   if (options.eager) {
-    const { promise } = query;
-    if (query.status === Status.IDLE && !promise) {
-      const data = read<T>(query, ref, fetch, options.suspendOnRefetch)();
-      if (isSyncPromise(query.promise)) {
-        query.status = Status.SUCCESS;
-        query.data = data;
-        ref.current = { ...query };
-      }
-    }
+    eagerlyFetchQuery(query, ref, fetch, options.suspendOnRefetch);
   }
   if (options.prefetch) {
-    useEffect(() => {
-      if (query.status === Status.IDLE && !query.promise) {
-        fetch(true);
-      }
-    }, [ query.status ]);
+    usePrefetch(query, fetch);
   }
 
   return useMemo(() => {

@@ -9,6 +9,7 @@ import {
 } from '@respite/core';
 import { useCallback, useRef } from 'react';
 import { QueryOptions } from './types';
+import { isQueryExpired } from './utils';
 
 export default function useQueryCallback<T, D extends any[]>(
   key: Key,
@@ -30,7 +31,7 @@ export default function useQueryCallback<T, D extends any[]>(
     const depsWithKey = [ key, ...deps ];
     let q = cache.getQuery<T>(depsWithKey);
 
-    if (q.status === Status.SUCCESS) {
+    if (q.status === Status.SUCCESS && isQueryExpired(q, options.ttl) === false) {
       // already fetched / cached / etc.
     } else if (q.status === Status.LOADING) {
       // we're already fetching the data from somewhere else
@@ -52,10 +53,6 @@ export default function useQueryCallback<T, D extends any[]>(
       const data = await promise;
       cache.success(depsWithKey, data);
       cache.setPromise<T>(depsWithKey, null);
-
-      if (options.ttl != null) {
-        q.ttl = options.ttl;
-      }
 
       q = {
         ...q,

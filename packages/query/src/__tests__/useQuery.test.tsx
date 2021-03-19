@@ -1064,3 +1064,144 @@ describe('when I make a query eager', () => {
     });
   });
 });
+
+describe('when I set a ttl', () => {
+  describe('when the ttl has not lapsed', () => {
+    it('uses the cached data', async() => {
+      const fetch = jest.fn().mockResolvedValue('I am content');
+      const Fallback = () => (<div>Loading...</div>);
+      const Child = ({ query }: { query: Query<any> }) => (<div>{query.data}</div>);
+      const Parent = () => {
+        const query = useQuery('basket', fetch, [], { ttl: 1000 });
+        return (<Child query={query}/>);
+      };
+  
+      const { rerender } = render(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>,
+        { wrapper }
+      );
+  
+      await screen.findByText('I am content');
+      expect(fetch).toBeCalledTimes(1);
+
+      await act(() => new Promise(res => setTimeout(res, 100)));
+      rerender(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>
+      );
+
+      expect(fetch).toBeCalledTimes(1);
+    });
+  });
+  describe('when the ttl has lapsed', () => {
+    it('re-fetches the data', async() => {
+      const fetch = jest.fn().mockResolvedValue('I am content');
+      const Fallback = () => (<div>Loading...</div>);
+      const Child = ({ query }: { query: Query<any> }) => (<div>{query.data}</div>);
+      const Parent = () => {
+        const query = useQuery('basket', fetch, [], { ttl: 1000 });
+        return (<Child query={query}/>);
+      };
+  
+      const { rerender } = render(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>,
+        { wrapper }
+      );
+  
+      await screen.findByText('I am content');
+
+      await act(() => new Promise(res => setTimeout(res, 1000)));
+      rerender(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>
+      );
+
+      expect(fetch).toBeCalledTimes(2);
+    });
+    describe('when I re-render', () => {
+      it('uses the cached data', async() => {
+        const fetch = jest.fn().mockResolvedValue('I am content');
+        const Fallback = () => (<div>Loading...</div>);
+        const Child = ({ query }: { query: Query<any> }) => (<div>{query.data}</div>);
+        const Parent = () => {
+          const query = useQuery('basket', fetch, [], { ttl: 1000 });
+          return (<Child query={query}/>);
+        };
+    
+        const { rerender } = render(
+          <Suspense fallback={<Fallback/>}>
+            <Parent/>
+          </Suspense>,
+          { wrapper }
+        );
+    
+        await screen.findByText('I am content');
+  
+        await act(() => new Promise(res => setTimeout(res, 1000)));
+        rerender(
+          <Suspense fallback={<Fallback/>}>
+            <Parent/>
+          </Suspense>
+        );
+
+        await act(() => new Promise(res => setTimeout(res, 100)));
+        rerender(
+          <Suspense fallback={<Fallback/>}>
+            <Parent/>
+          </Suspense>
+        );
+  
+        expect(fetch).toBeCalledTimes(2);
+      });
+      describe('when the ttl lapses a second time', () => {
+        it('re-fetches the data again', async () => {
+          const fetch = jest.fn().mockResolvedValue('I am content');
+          const Fallback = () => (<div>Loading...</div>);
+          const Child = ({ query }: { query: Query<any> }) => (<div>{query.data}</div>);
+          const Parent = () => {
+            const query = useQuery('basket', fetch, [], { ttl: 1000 });
+            return (<Child query={query}/>);
+          };
+      
+          const { rerender } = render(
+            <Suspense fallback={<Fallback/>}>
+              <Parent/>
+            </Suspense>,
+            { wrapper }
+          );
+      
+          await screen.findByText('I am content');
+    
+          await act(() => new Promise(res => setTimeout(res, 1000)));
+          rerender(
+            <Suspense fallback={<Fallback/>}>
+              <Parent/>
+            </Suspense>
+          );
+  
+          await act(() => new Promise(res => setTimeout(res, 100)));
+          rerender(
+            <Suspense fallback={<Fallback/>}>
+              <Parent/>
+            </Suspense>
+          );
+
+          await act(() => new Promise(res => setTimeout(res, 1000)));
+          rerender(
+            <Suspense fallback={<Fallback/>}>
+              <Parent/>
+            </Suspense>
+          );
+    
+          expect(fetch).toBeCalledTimes(3);
+        });
+      });
+    });
+  });
+});
