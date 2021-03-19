@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.3](https://github.com/jackmellis/respite/compare/v3.0.2...v3.0.3) (2021-03-19)
+
+
+### Bug Fixes
+
+* **@respite/core:** fix ttl persistence issues ([2702001](https://github.com/jackmellis/respite/commit/27020019df2df108b038d352a14c7cdaaf5693ab))
+
+
+
+
+
 ## [3.0.2](https://github.com/jackmellis/respite/compare/v3.0.1...v3.0.2) (2021-03-17)
 
 **Note:** Version bump only for package @respite/query
