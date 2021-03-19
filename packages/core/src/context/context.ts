@@ -12,7 +12,6 @@ export interface QueryState<T> {
   promise: Promise<T> | SyncPromise<T>,
   created: Date,
   subscribers: Subscriber<T>[],
-  ttl?: number,
 }
 
 export type Subscriber<T> = (query: QueryState<T>) => void;

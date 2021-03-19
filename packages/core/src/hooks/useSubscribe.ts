@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Deps, QueryState } from '../types';
 import useCache from './useCache';
 
-export default function useSubscribe(callback: (query: QueryState<any>) => void, deps: Deps, ttl?: number) {
+export default function useSubscribe(callback: (query: QueryState<any>) => void, deps: Deps) {
   const cache = useCache();
 
   useEffect(() => {
@@ -10,9 +10,6 @@ export default function useSubscribe(callback: (query: QueryState<any>) => void,
     const fn = (query: QueryState<any>) => callback(query);
     
     query.subscribers.push(fn);
-    if (ttl != null) {
-      query.ttl = ttl;
-    }
 
     return () => {
       const i = query.subscribers.indexOf(fn);

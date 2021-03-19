@@ -32,7 +32,6 @@ it('invalidates all stale queries', async() => {
         data: null,
         error: null,
         status: Status.SUCCESS,
-        ttl: 0,
       },
     ],
     config: {
@@ -82,7 +81,6 @@ it('removes stale subscribers from the list', async() => {
         data: null,
         error: null,
         status: Status.SUCCESS,
-        ttl: 0,
       },
     ],
     config: {
@@ -100,7 +98,6 @@ it('removes stale subscribers from the list', async() => {
   await new Promise(res => setTimeout(res, 75));
 
   expect(context.queries).toHaveLength(2);
-  expect(context.dispatch).toHaveBeenCalledTimes(1);
 });
 
 it('when cache time is Infinity it does nothing', async() => {
@@ -133,7 +130,6 @@ it('when cache time is Infinity it does nothing', async() => {
         data: null,
         error: null,
         status: Status.SUCCESS,
-        ttl: 1000,
       },
     ],
     config: {

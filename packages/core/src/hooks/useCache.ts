@@ -25,16 +25,7 @@ export default function useCache(): Cache {
   const { queries, dispatch } = useContext<any>();
 
   const getQuery = <T>(deps: Deps) => {
-    let [ query, i ] = getQueryByDeps<T>(queries, deps);
-    if (
-      query != null &&
-      query.ttl != null &&
-      query.promise == null &&
-      query.created.getTime() + query.ttl < new Date().getTime()
-    ) {
-      queries.splice(i, 1);
-      query = null; 
-    }
+    let [ query ] = getQueryByDeps<T>(queries, deps);
 
     if (query == null) {
       query = {
