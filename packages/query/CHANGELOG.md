@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/jackmellis/respite/compare/v3.0.3...v3.0.4) (2021-03-19)
+
+
+### Bug Fixes
+
+* **@respite/query:** handle 0 ttl renders ([6686473](https://github.com/jackmellis/respite/commit/66864738ddd2ee21e4873860e5fb33ad6dc42bdc))
+
+
+
+
+
 ## [3.0.3](https://github.com/jackmellis/respite/compare/v3.0.2...v3.0.3) (2021-03-19)
 
 
