@@ -5,8 +5,11 @@ import read from './read';
 import syncQueryState from './syncQueryState';
 
 export const isQueryExpired = <T>(query: QueryState<T>, ttl?: number) => {
+  if (ttl == null || (query.status !== Status.ERROR && query.status !== Status.SUCCESS)) {
+    return false;
+  }
   const now = new Date().getTime();
-  const expires = query.created.getTime() + ttl;
+  const expires = query.created.getTime() + (ttl || 10);
   return expires < now;
 };
 
@@ -16,9 +19,9 @@ export const useReset = (key: Key, reset: () => void) => {
   useEffect(() => {
     if (firstRenderRef.current) {
       firstRenderRef.current = false;
-    } else {
-      reset();
+      return;
     }
+    reset();
   }, [ key ]);
 };
 
@@ -33,9 +36,9 @@ export const useSyncQueryState = <T>(
   useEffect(() => {
     if (firstRenderRef.current) {
       firstRenderRef.current = false;
-    } else {
-      syncQueryState(query, ref, rerender);
+      return;
     }
+    syncQueryState(query, ref, rerender);
   }, deps);
 };
 

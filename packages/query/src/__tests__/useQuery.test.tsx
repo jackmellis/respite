@@ -1204,4 +1204,38 @@ describe('when I set a ttl', () => {
       });
     });
   });
+  describe('when ttl is 0', () => {
+    it('does not blow up', async() => {
+      const fetch = jest.fn().mockResolvedValue('I am content');
+      const Fallback = () => (<div>Loading...</div>);
+      const Child = ({ query }: { query: Query<any> }) => {
+        return (<div>{query.data}</div>);
+      };
+      const Parent = () => {
+        const query = useQuery('basket', fetch, [], { ttl: 0 });
+        return (<Child query={query}/>);
+      };
+  
+      const { rerender } = render(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>,
+        { wrapper }
+      );
+
+      await act(() => new Promise(res => setTimeout(res, 1000)));
+  
+      await screen.findByText('I am content');
+      expect(fetch).toBeCalledTimes(1);
+
+      await act(() => new Promise(res => setTimeout(res, 100)));
+      rerender(
+        <Suspense fallback={<Fallback/>}>
+          <Parent/>
+        </Suspense>
+      );
+
+      expect(fetch).toBeCalledTimes(2);
+    });
+  });
 });
