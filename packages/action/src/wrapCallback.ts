@@ -1,5 +1,5 @@
 import {
-  Dispatch,
+  Dispatch, useCallback,
 } from 'react';
 import {
   ActionType,
@@ -10,7 +10,7 @@ export default function wrapCallback<T, F extends (...args: any[]) => Promise<T>
   dispatch: Dispatch<Action<T>>,
   callback: F,
 ): F {
-  return (async(...args: Parameters<F>) => {
+  const f = (async(...args: Parameters<F>) => {
     let result: T;
     let error: any;
     let errored = false;
@@ -37,4 +37,5 @@ export default function wrapCallback<T, F extends (...args: any[]) => Promise<T>
 
     return result;
   }) as F;
+  return useCallback(f, [ callback, dispatch ]);
 }
