@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.5](https://github.com/jackmellis/respite/compare/v3.0.4...v3.0.5) (2021-04-01)
+
+
+### Bug Fixes
+
+* **@respite/action:** memoize the action fn ([565ca0c](https://github.com/jackmellis/respite/commit/565ca0cd9bef0ae97bbe6f611dad188324aa09d1))
+
+
+
+
+
 ## [3.0.4](https://github.com/jackmellis/respite/compare/v3.0.3...v3.0.4) (2021-03-19)
 
 
