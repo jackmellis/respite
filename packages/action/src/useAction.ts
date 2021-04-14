@@ -3,6 +3,9 @@ import {
   Status,
   useCache,
   Cache,
+  Key,
+  Deps,
+  usePubSub,
 } from '@respite/core';
 import useReducer from './useReducer';
 import wrapCallback from './wrapCallback';
@@ -20,11 +23,22 @@ export interface ActionQuery<F extends AnyFunction<any>> {
   reset: () => void,
 }
 
-export default function useAction<F extends AnyFunction<any>>(
+function useAction<F extends AnyFunction<any>>(callback: F, deps?: Deps): ActionQuery<F>
+function useAction<F extends AnyFunction<any>>(key: Key, callback: F, deps?: Deps): ActionQuery<F>
+function useAction<F extends AnyFunction<any>>(
+  key: Key,
   callback: F,
+  deps?: any[]
 ): ActionQuery<F> {
+  if (typeof key === 'function') {
+    // @ts-ignore
+    deps = callback;
+    callback = key;
+    key = undefined;
+  }
   type T = PromiseType<ReturnType<F>>;
   const { invalidate } = useCache();
+  const pubSub = usePubSub();
   const [ state, dispatch ] = useReducer<T>();
   const {
     data,
@@ -35,7 +49,7 @@ export default function useAction<F extends AnyFunction<any>>(
   const reset = () => dispatch({ type: ActionType.INVALIDATE });
   const submitting = status === Status.LOADING;
 
-  const action = wrapCallback(dispatch, callback);
+  const action = wrapCallback(key, dispatch, callback, pubSub, deps);
 
   return {
     action,
@@ -47,3 +61,5 @@ export default function useAction<F extends AnyFunction<any>>(
     invalidate,
   };
 }
+
+export default useAction;
