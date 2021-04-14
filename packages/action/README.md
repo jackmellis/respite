@@ -29,7 +29,7 @@ return (
 ## useAction
 
 ```ts
-(callback: Function): {
+(key?: any, callback: Function): {
   action: Function,
   status: Status,
   data: any,
@@ -64,6 +64,8 @@ const { invalidate } = useAction(async (values) => {
   invalidate({ key: "my-query-key" });
 });
 ```
+
+> The `key` parameter is optional and is only used to drive the `@respite/exchange` library.
 
 - action
 - status

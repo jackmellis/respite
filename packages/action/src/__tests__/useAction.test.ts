@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import useAction from '../useAction';
 import { useQuery, Provider, Status } from '@respite/query';
+import { PubSubEvent, usePubSub } from '@respite/core';
 
 const swap = (promise: Promise<any>) => promise.then(r => Promise.reject(r), e => e);
 
@@ -117,6 +118,20 @@ describe('when I call action', () => {
       expect(result.current.q1.status).toBe(Status.FETCHING);
       expect(result.current.q2.status).toBe(Status.FETCHING);
       expect(result.current.q3.status).toBe(Status.FETCHING);
+    });
+    it('dispatches a fulfilled event', async () => {
+      const { result } = renderHook(() => {
+        const pubSub = usePubSub();
+        const { action } = useAction('foo action', () => Promise.resolve('foo'));
+
+        return {pubSub,action};
+      }, { wrapper });
+
+      const spy = jest.spyOn(result.current.pubSub, 'dispatch');
+
+      await act(result.current.action);
+
+      expect(spy).toBeCalledWith(PubSubEvent.ACTION_FULFILLED, 'foo action');
     });
 
     describe('when I reset the action', () => {
