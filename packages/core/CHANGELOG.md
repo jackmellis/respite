@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/jackmellis/respite/compare/v3.0.5...v4.0.0) (2021-04-14)
+
+
+### Features
+
+* **@respite/core:** replace subscribers with a pub/sub module ([59b3fc6](https://github.com/jackmellis/respite/commit/59b3fc697dd7000c3b304a535434f30a4a4a996d))
+
+
+### BREAKING CHANGES
+
+* **@respite/core:** the query.subscribers property is now a number rather than an array of callbacks
+BREKAING CHANGE: useCache no longer returns a getSubscribers method
+* **@respite/core:** the Subscriber type is no longer exported
+
+
+
+
+
 ## [3.0.3](https://github.com/jackmellis/respite/compare/v3.0.2...v3.0.3) (2021-03-19)
 
 

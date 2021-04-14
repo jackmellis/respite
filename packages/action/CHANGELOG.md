@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/jackmellis/respite/compare/v3.0.5...v4.0.0) (2021-04-14)
+
+
+### Features
+
+* **@respite/action:** add key parameter ([90bbc31](https://github.com/jackmellis/respite/commit/90bbc319513b02a4d70df4efb4b65ce7d4bc2651))
+
+
+### BREAKING CHANGES
+
+* **@respite/action:** requires the latest version of @respite/core
+
+
+
+
+
 ## [3.0.5](https://github.com/jackmellis/respite/compare/v3.0.4...v3.0.5) (2021-04-01)
 
 
