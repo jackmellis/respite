@@ -155,3 +155,7 @@ I often have an api that provides me with a whole load of data that I then have 
 ## [@respite/action](./packages/action/README.md)
 
 This is a tiny utility library that does a simlar job to react-query's `useMutation` hook. Essentially it wraps a mutator function and provides some metadata about it such as status, error, data, submitting. It's not directly related to queries or atoms so it can be used entirly on its own.
+
+## [@respite/exchange](./packages/exchange/README.md)
+
+This totally optional library allows you to decouple your actions and queries and handle the relationship between them separately.
