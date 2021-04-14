@@ -1,8 +1,9 @@
 import React, { Suspense, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useSelector } from '@respite/select';
 import { useAction, useSnapshot } from '@respite/action';
 import { useQuery, Query, Status } from '@respite/query';
-import { ErrorBoundary } from 'react-error-boundary';
+import { useExchange } from '@respite/exchange';
 import { TodoService, Todo } from './TodoService';
 
 const after = (delay: number) => new Promise<void>(res => setTimeout(res, delay));
@@ -87,9 +88,8 @@ const CreateTodo = ({ query }: { query: Query<Todo[]> }) => {
     action: handleSubmit,
     submitting,
     reset,
-    invalidate,
     error,
-  } = useAction(async() => {
+  } = useAction('create_todo', async() => {
     // with the query object we can optimisitically update the state
     const revert = snapshot(todos => todos.concat({
       id: -1,
@@ -104,9 +104,8 @@ const CreateTodo = ({ query }: { query: Query<Todo[]> }) => {
       await after(250);
       reset();
       // invaliding todos will cause the todo list to refresh
-      invalidate({ key: 'todos' });
+      // invalidate({ key: 'todos' });
     } catch (e) {
-      debugger;
       revert();
       // we don't actually need to do anything here unless we need to
       // the error state is automatically captured by useAction
@@ -147,6 +146,7 @@ const TodoList = ({ query }: { query: Query<Todo[]> }) => {
 const ConnectedTodoList = () => {
   // useQuery is lazy and will only suspend at the point you actually read from it
   const query = useTodos();
+  useExchange([ 'todos', 'create_todo' ]);
 
   return (
     <ErrorBoundary
