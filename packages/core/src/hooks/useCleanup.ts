@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Context, QueryState } from '../types';
 
 const isQueryInUse = (query: QueryState<any>, cacheTime: number) => {
-  if (query.subscribers.length > 0 || query.promise || cacheTime === Infinity) {
+  if (query.subscribers > 0 || query.promise || cacheTime === Infinity) {
     return true;
   }
   return false;

@@ -1,8 +1,8 @@
-import { ActionType, Status } from '../constants';
-import { getQueryByDeps } from '../utils';
+import { useMemo } from 'react';
+import { ActionType, PubSubEvent, Status } from '../constants';
+import { getQueryByDeps, PubSub } from '../utils';
 import type { Deps, Key } from '../types';
 import type {QueryState, State} from './context';
-import { useMemo } from 'react';
 
 
 interface ActionInvalidate {
@@ -29,7 +29,7 @@ interface ActionFailure {
 // eslint-disable-next-line max-len
 export type Action<T> = ActionInvalidate | ActionFetching | ActionSuccess<T> | ActionFailure;
 
-export const updateQuery = <T>(state: State<T>, deps: Deps, props: Partial<QueryState<T>>) => {
+export const updateQuery = <T>(state: State<T>, deps: Deps, props: Partial<QueryState<T>>, pubSub: PubSub) => {
   const [ query ] = getQueryByDeps(state, deps);
 
   if (query == null) {
@@ -37,46 +37,47 @@ export const updateQuery = <T>(state: State<T>, deps: Deps, props: Partial<Query
       status: Status.IDLE,
       deps,
       created: new Date(),
-      subscribers: [],
       data: void 0,
       error: void 0,
       promise: null,
+      subscribers: 0,
       ...props,
     });
     return;
   }
 
   Object.assign(query, props);
-  query.subscribers.forEach(cb => {
-    cb(query);
-  });
+  pubSub.dispatch(PubSubEvent.INVALIDATE_QUERY, query);
+  // query.subscribers.forEach(cb => {
+  //   cb(query);
+  // });
 };
 
-export const fetching = <T>(state: State<T>, action: ActionFetching) => {
-  updateQuery(state, action.deps, { status: Status.LOADING });
+export const fetching = <T>(state: State<T>, action: ActionFetching, pubSub: PubSub) => {
+  updateQuery(state, action.deps, { status: Status.LOADING }, pubSub);
 };
 
-export const success = <T>(state: State<T>, action: ActionSuccess<T>) => {
+export const success = <T>(state: State<T>, action: ActionSuccess<T>, pubSub: PubSub) => {
   updateQuery(state, action.deps, {
     status: Status.SUCCESS,
     data: action.data,
     error: void 0,
     created: new Date(),
     promise: null,
-  });
+  }, pubSub);
 };
 
-export const failure = <T>(state: State<T>, action: ActionFailure) => {
+export const failure = <T>(state: State<T>, action: ActionFailure, pubSub: PubSub) => {
   updateQuery(state, action.deps, {
     status: Status.ERROR,
     data: void 0,
     error: action.error,
     created: new Date(),
     promise: null,
-  });
+  }, pubSub);
 };
 
-export const invalidate = <T>(state: State<T>, action: ActionInvalidate) => {
+export const invalidate = <T>(state: State<T>, action: ActionInvalidate, pubSub: PubSub) => {
   let {
     deps,
     exact,
@@ -113,33 +114,33 @@ export const invalidate = <T>(state: State<T>, action: ActionInvalidate) => {
         data: undefined,
         error: undefined,
         promise: null,
-      });
+      }, pubSub);
     }
   });
 };
 
-const reducer = (state: State<any>, action: Action<any>) => {
+const reducer = (state: State<any>, action: Action<any>, pubSub: PubSub) => {
   switch (action.type) {
   case ActionType.FETCHING:
-    fetching(state, action);
+    fetching(state, action, pubSub);
     break;
   case ActionType.SUCCESS:
-    success(state, action);
+    success(state, action, pubSub);
     break;
   case ActionType.FAILURE:
-    failure(state, action);
+    failure(state, action, pubSub);
     break;
   case ActionType.INVALIDATE:
-    invalidate(state, action);
+    invalidate(state, action, pubSub);
     break;
   default:
     break;
   }
 };
 
-export default (state: State<any>) => {
+export default (state: State<any>, pubSub: PubSub) => {
   const dispatch = (action: Action<any>) => {
-    reducer(state, action);
+    reducer(state, action, pubSub);
   };
 
   return useMemo(() => [ state, dispatch ] as const, []);

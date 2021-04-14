@@ -1,21 +1,26 @@
 import { useEffect } from 'react';
+import { PubSubEvent } from '../constants';
 import { Deps, QueryState } from '../types';
 import useCache from './useCache';
+import usePubSub from './usePubSub';
 
 export default function useSubscribe(callback: (query: QueryState<any>) => void, deps: Deps) {
   const cache = useCache();
+  const pubSub = usePubSub();
 
   useEffect(() => {
     const query = cache.getQuery<any>(deps);
-    const fn = (query: QueryState<any>) => callback(query);
-    
-    query.subscribers.push(fn);
+
+    query.subscribers++;
+    const unsubscribe = pubSub.subscribe<QueryState<any>>(PubSubEvent.INVALIDATE_QUERY, q => {
+      if (q === query) {
+        callback(query);
+      }
+    });
 
     return () => {
-      const i = query.subscribers.indexOf(fn);
-      if (i >= 0) {
-        query.subscribers.splice(i, 1);
-      }
+      query.subscribers--;
+      unsubscribe();
     };
   }, deps);
 }

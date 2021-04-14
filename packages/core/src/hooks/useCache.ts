@@ -2,14 +2,13 @@ import { useMemo } from 'react';
 import useContext from './useContext';
 import { getQueryByDeps } from '../utils';
 import type SyncPromise from '../utils/SyncPromise';
-import type { Deps, Key, QueryState, Subscriber } from '../types';
+import type { Deps, Key, QueryState } from '../types';
 import { ActionType, Status } from '../constants';
 
 export interface Cache {
   getQuery<T>(deps: Deps): QueryState<T>,
   getPromise<T>(deps: Deps): Promise<T> | SyncPromise<T>,
   setPromise<T>(deps: Deps, promise: Promise<T> | SyncPromise<T>): void,
-  getSubscribers<T>(deps: Deps): Subscriber<T>[],
   fetching(deps: Deps): void,
   success<T>(deps: Deps, data: T): void,
   failure(deps: Deps, error: any): void,
@@ -18,7 +17,7 @@ export interface Cache {
     deps?: Deps,
     exact?: boolean,
     predicate?: <T>(query: QueryState<T>) => boolean,
-  }): void,
+  }): void;
 }
 
 export default function useCache(): Cache {
@@ -35,15 +34,12 @@ export default function useCache(): Cache {
         error: void 0,
         created: new Date(),
         promise: undefined,
-        subscribers: [],
+        subscribers: 0,
       };
       queries.push(query);
     }
     
     return query;
-  };
-  const getSubscribers = <T>(deps: Deps) => {
-    return getQuery<T>(deps).subscribers;
   };
   const getPromise = <T>(deps: Deps) => {
     return getQuery<T>(deps).promise;
@@ -87,7 +83,6 @@ export default function useCache(): Cache {
 
   return useMemo(() => ({
     getQuery,
-    getSubscribers,
     getPromise,
     setPromise,
     fetching,
