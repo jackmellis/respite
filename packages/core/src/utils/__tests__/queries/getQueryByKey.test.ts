@@ -10,7 +10,7 @@ const state = [
     error: null,
     created: new Date(),
     promise: null,
-    subscribers: [],
+    subscribers: 0,
   },
   {
     deps: [ 'b', 34 ] as Deps,
@@ -19,7 +19,7 @@ const state = [
     error: null,
     created: new Date(),
     promise: null,
-    subscribers: [],
+    subscribers: 0,
   },
 ];
 

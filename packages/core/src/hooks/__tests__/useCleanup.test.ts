@@ -4,12 +4,13 @@ import useCleanup from '../useCleanup';
 
 it('invalidates all stale queries', async() => {
   const context = {
+    pubSub: null,
     dispatch: jest.fn(),
     queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: [],
+        subscribers: 0,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -18,7 +19,7 @@ it('invalidates all stale queries', async() => {
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: [ jest.fn() ],
+        subscribers: 1,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -27,7 +28,7 @@ it('invalidates all stale queries', async() => {
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: [],
+        subscribers: 0,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -54,11 +55,12 @@ it('invalidates all stale queries', async() => {
 it('removes stale subscribers from the list', async() => {
   const context = {
     dispatch: jest.fn(),
+    pubSub: null,
     queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: [],
+        subscribers: 0,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -67,7 +69,7 @@ it('removes stale subscribers from the list', async() => {
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: [ jest.fn() ],
+        subscribers: 1,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -76,7 +78,7 @@ it('removes stale subscribers from the list', async() => {
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: [ jest.fn() ],
+        subscribers: 1,
         created: new Date('2021-01-01'),
         data: null,
         error: null,
@@ -102,12 +104,13 @@ it('removes stale subscribers from the list', async() => {
 
 it('when cache time is Infinity it does nothing', async() => {
   const context = {
+    pubSub: null,
     dispatch: jest.fn(),
     queries: [
       {
         deps: [ 1 ] as [ 1 ],
         promise: null,
-        subscribers: [],
+        subscribers: 0,
         created: new Date(),
         data: null,
         error: null,
@@ -116,7 +119,7 @@ it('when cache time is Infinity it does nothing', async() => {
       {
         deps: [ 2 ] as [ 2 ],
         promise: null,
-        subscribers: [ jest.fn() ],
+        subscribers: 1,
         created: new Date(),
         data: null,
         error: null,
@@ -125,7 +128,7 @@ it('when cache time is Infinity it does nothing', async() => {
       {
         deps: [ 3 ] as [ 3 ],
         promise: null,
-        subscribers: [ jest.fn() ],
+        subscribers: 1,
         created: new Date(),
         data: null,
         error: null,

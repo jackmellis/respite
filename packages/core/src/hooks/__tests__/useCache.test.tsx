@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { Status } from '../../constants';
-import context, { State, Subscriber } from '../../context/context';
+import context, { State } from '../../context/context';
 import useCache from '../useCache';
 
 const defaultState: State<any> = [
@@ -12,7 +12,7 @@ const defaultState: State<any> = [
     error: null,
     created: new Date(),
     promise: Promise.resolve(),
-    subscribers: [],
+    subscribers: 0,
   },
 ];
 
@@ -23,11 +23,12 @@ const wrapper = ({
 }: {
   state?: State<any>,
   dispatch?: (...args: any[]) => any,
-  subscribers?: Subscriber<any>[],
+  subscribers?: any[],
   children?: ReactNode,
 }) => (
   <context.Provider
     value={{
+      pubSub: null,
       queries: state,
       dispatch,
       config: {

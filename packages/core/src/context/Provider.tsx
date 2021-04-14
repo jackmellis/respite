@@ -3,6 +3,7 @@ import context, { Context } from './context';
 import reducer from './reducer';
 import { useCleanup } from '../hooks';
 import { DeepPartial, RespiteConfig, State } from '../types';
+import { createPubSub } from '../utils';
 
 interface Props extends DeepPartial<RespiteConfig> {
   cacheTime?: number,
@@ -15,10 +16,12 @@ export default function Provider ({
   ...config
 }: Props) {
   const stateRef = useRef<State<any>>([]);
-  const [ queries, dispatch ] = reducer(stateRef.current);
+  const pubSub = createPubSub();
+  const [ queries, dispatch ] = reducer(stateRef.current, pubSub);
   const value = React.useMemo<Context<any>>(() => ({
     dispatch,
     queries,
+    pubSub,
     config: {
       ...config,
       queries: {

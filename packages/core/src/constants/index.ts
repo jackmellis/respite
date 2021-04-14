@@ -12,3 +12,8 @@ export enum ActionType {
   SUCCESS = 'SUCCESS',
   FAILURE = 'FAILURE',
 }
+
+export enum PubSubEvent {
+  ACTION_FULFILLED = 'action fulfilled',
+  INVALIDATE_QUERY = 'invalidate query',
+}
