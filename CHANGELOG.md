@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/jackmellis/respite/compare/v4.0.0...v4.0.1) (2021-04-15)
+
+
+### Bug Fixes
+
+* **@respite/action:** do not reset error or data when fetching ([d650365](https://github.com/jackmellis/respite/commit/d65036501b69aed131c58656fdc9224cea18b36a))
+
+
+
+
+
 # [4.0.0](https://github.com/jackmellis/respite/compare/v3.0.5...v4.0.0) (2021-04-14)
 
 
