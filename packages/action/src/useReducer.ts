@@ -36,8 +36,8 @@ const reducer = <T>(state: State<T>, action: Action<T>) => {
   case ActionType.FETCHING:
     return {
       status: Status.LOADING,
-      data: null,
-      error: null,
+      data: state.data,
+      error: state.error,
     };
   case ActionType.SUCCESS:
     return {
