@@ -42,10 +42,14 @@ export const useSyncQueryState = <T>(
   }, deps);
 };
 
-export const useTtl = <T>(query: QueryState<T>, invalidate: () => void, ttl?: number) => {
+export const useTtl = <T>(query: QueryState<T>, invalidate: () => void, rerender: () => void, ttl?: number) => {
   useEffect(() => {
     if (isQueryExpired(query, ttl)) {
       invalidate();
+    }
+    if (ttl && ttl > 1000) {
+      const handle = setTimeout(rerender, ttl);
+      return () => clearTimeout(handle);
     }
   });
 };

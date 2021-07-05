@@ -75,7 +75,7 @@ export default function useQuery<T>(
 
   useReset(key, reset);
   useSyncQueryState(query, ref, rerender, deps);
-  useTtl(query, invalidate, options.ttl);
+  useTtl(query, invalidate, rerender, options.ttl);
   useSubscribe(newQuery => {
     syncQueryState(newQuery, ref, rerender);
   }, deps);
