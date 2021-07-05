@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/jackmellis/respite/compare/v4.0.1...v4.0.2) (2021-07-05)
+
+
+### Bug Fixes
+
+* **@respite/query:** ttl should be triggering a re-render ([c6f83b8](https://github.com/jackmellis/respite/commit/c6f83b8cc5ba9065e92e5d034ea11b254fdffe83))
+
+
+
+
+
 ## [4.0.1](https://github.com/jackmellis/respite/compare/v4.0.0...v4.0.1) (2021-04-15)
 
 
